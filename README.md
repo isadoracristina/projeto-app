@@ -1,4 +1,4 @@
-# Dispensa
+# Despensa
 ### Aplicativo de gerenciamento de alimentos.
 
 ### Equipe:
