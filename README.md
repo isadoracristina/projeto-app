@@ -3,9 +3,9 @@
 
 ### Equipe:
 
-André Godoy
-Isadora Cristina
-Júlia Fonseca
+André Godoy  
+Isadora Cristina  
+Júlia Fonseca  
 Luiz Guilherme Leroy Vieira
 
 ### Escopo:
@@ -20,4 +20,4 @@ Uma outra feature importante é a de cadastro de receitas, afinal o usuário pod
 
 Framework: Flutter  
 Linguagem: Dart  
-Banco de Dados: SQLite
+Banco de Dados: SQLite (ou sqflite, seguindo o exemplo implementado pelo Flutter).
