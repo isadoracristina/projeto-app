@@ -3,10 +3,10 @@
 
 ### Equipe:
 
-André Godoy -- backend dev 
-Isadora Cristina -- full stack e PO
-Júlia Fonseca -- administradora do Banco de Dados
-Luiz Guilherme Leroy Vieira -- frontend dev
+André Godoy -- backend dev  
+Isadora Cristina -- full stack e PO  
+Júlia Fonseca -- administradora do Banco de Dados  
+Luiz Guilherme Leroy Vieira -- frontend dev  
 
 ### Escopo:
 
