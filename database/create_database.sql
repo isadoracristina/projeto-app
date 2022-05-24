@@ -8,6 +8,7 @@ CREATE TABLE Users
     psswd VARCHAR(100) NOT NULL,
     hash_psswd VARCHAR(100) NOT NULL,
     name_user VARCHAR(50) NOT NULL,
+    date_registered DATETIME NOT NULL,
     PRIMARY KEY (id_user)
 );
 
@@ -22,6 +23,7 @@ CREATE TABLE Recipes
     rating FLOAT,
     observation TEXT,
     last_made DATETIME,
+    date_registered DATETIME NOT NULL,
     PRIMARY KEY (id_recipe),
     FOREIGN KEY (id_user) REFERENCES Users(id_user)
 );
