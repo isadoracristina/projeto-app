@@ -61,6 +61,8 @@ flutter:
   assets:
     - assets/images/hometopleft.png
     - assets/images/homebottomright.png
+    - assets/images/myrecipes.jpg
+    - assets/images/mystock.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

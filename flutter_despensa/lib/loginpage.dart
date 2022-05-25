@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
-                      shadowColor: Color.fromARGB(255, 241, 147, 58),
+                      shadowColor: const Color.fromARGB(255, 241, 147, 58),
                     ),
                     child: const Text(
                       'Entrar',
