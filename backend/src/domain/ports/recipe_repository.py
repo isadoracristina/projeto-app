@@ -1,0 +1,9 @@
+from pydantic import BaseModel
+from typing import Protocol
+
+from backend.src.domain.entities.recipe import Recipe
+
+class RecipeRepository(Protocol):
+    async def get(self, id: int) -> Recipe: ...
+    async def create(self, recipe: Recipe) -> Recipe: ...
+    async def update(self, recipe: Recipe) -> Recipe: ...
