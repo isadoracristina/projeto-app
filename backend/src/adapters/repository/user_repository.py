@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from typing import Protocol
 
 from backend.src.domain.entities.user import User
 from backend.src.domain.ports.user_repository import UserRepository
