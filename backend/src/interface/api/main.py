@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, Request
+from fastapi import FastAPI, Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -40,7 +40,6 @@ def get_password_hash(password):
 
 async def authenticate_user(username: str, password: str):
     user = await UserRepository.get_by_name(name=username)
-    print(user)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
@@ -103,7 +102,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         data={"sub": user.name}, expires_delta=access_token_expires
     )
 
-    return {"access_token": user.name, "token_type": "Bearer"}
+    return {"access_token": access_token, "token_type": "Bearer"}
 
 @app.post("/user/")
 async def register_user(user: UserRegister):
