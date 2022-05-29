@@ -7,6 +7,7 @@ from pydantic.main import BaseModel
 from datetime import datetime, timedelta
 
 from backend.src.domain.entities.user import User
+from backend.src.domain.entities.recipe import Recipe
 from backend.src.adapters.repository.user_repository import UserRepositoryImpl
 from backend.src.interface.database.user_model import UserModel
 
@@ -104,12 +105,17 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
     return {"access_token": user.name, "token_type": "Bearer"}
 
-@app.post("/register/")
+@app.post("/user/register/")
 async def register_user(user: UserRegister):
     hashed_password = get_password_hash(user.password)
 
     await UserRepository.create(user.username, hashed_password)
     return user
+
+@app.post("/receipt/register/")
+async def register_receipt(recipe: Recipe, current_user: User = Depends(get_current_user)):
+    print(recipe)
+    return recipe
 
 @app.get("/items/")
 async def read_items(current_user: User = Depends(get_current_user)):
