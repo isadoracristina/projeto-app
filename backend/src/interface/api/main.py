@@ -115,7 +115,7 @@ async def register_user(user: UserRegister):
 
 @app.get("/recipe/{recipe_id}")
 async def get_recipe(
-        recipe_id: int = Path(title="The ID of the item to update", ge=1),
+        recipe_id: int = Path(title="The ID of the item to get", ge=1),
         current_user: User = Depends(get_current_user)
 ):
     return await RecipeRepository.get(recipe_id)
