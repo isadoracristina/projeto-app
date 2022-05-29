@@ -1,7 +1,7 @@
 from typing import List
 from pydantic.main import BaseModel
 
-from ingredient import Ingredient
+from .ingredient import Ingredient
 
 class Recipe(BaseModel):
     name: str

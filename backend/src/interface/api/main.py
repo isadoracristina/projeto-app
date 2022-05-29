@@ -105,18 +105,14 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
     return {"access_token": user.name, "token_type": "Bearer"}
 
-@app.post("/user/register/")
+@app.post("/user/")
 async def register_user(user: UserRegister):
     hashed_password = get_password_hash(user.password)
 
     await UserRepository.create(user.username, hashed_password)
     return user
 
-@app.post("/receipt/register/")
-async def register_receipt(recipe: Recipe, current_user: User = Depends(get_current_user)):
-    print(recipe)
+@app.post("/recipe/")
+async def register_recipe(recipe: Recipe, current_user: User = Depends(get_current_user)):
     return recipe
 
-@app.get("/items/")
-async def read_items(current_user: User = Depends(get_current_user)):
-    return current_user
