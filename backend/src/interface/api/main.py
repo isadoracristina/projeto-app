@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -7,8 +7,9 @@ from pydantic.main import BaseModel
 from datetime import datetime, timedelta
 
 from backend.src.domain.entities.user import User
-
 from backend.src.adapters.repository.user_repository import UserRepositoryImpl
+from backend.src.interface.database.user_model import UserModel
+
 UserRepository = UserRepositoryImpl()
 
 
@@ -22,6 +23,10 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: str | None = None
+
+class UserRegister(BaseModel):
+    username: str
+    password: str
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -98,6 +103,13 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     )
 
     return {"access_token": user.name, "token_type": "Bearer"}
+
+@app.post("/register/")
+async def register_user(user: UserRegister):
+    hashed_password = get_password_hash(user.password)
+
+    await UserRepository.create(user.username, hashed_password)
+    return user
 
 @app.get("/items/")
 async def read_items(current_user: User = Depends(get_current_user)):
