@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException, Request, status, Path
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.middleware.cors import CORSMiddleware
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic.main import BaseModel
@@ -12,6 +13,21 @@ from backend.src.domain.entities.user import User
 from backend.src.domain.entities.recipe import Recipe
 
 from backend.src.interface.database.user_model import UserModel
+
+app = FastAPI()
+
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
 
 UserRepository = UserRepositoryImpl()
 RecipeRepository = RecipeRepositoryImpl()
@@ -58,8 +74,6 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
-
-app = FastAPI()
 
 @app.get("/")
 async def root():
