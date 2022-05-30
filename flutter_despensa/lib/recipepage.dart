@@ -88,6 +88,7 @@ class RecipePage extends StatelessWidget {
                 itemBuilder: (BuildContext ctxt, int index) {
                   return Container(
                     alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.all(3),
                     padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                     decoration: BoxDecoration(
                       color:Colors.orangeAccent,
