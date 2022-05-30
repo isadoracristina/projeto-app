@@ -25,11 +25,10 @@ class ApiServices {
     );
 
     // Tratar caso resposta não seja OK
-
     var body_json = json.decode(response.body);
     var token = body_json['token_type'] + ' ' + body_json['access_token'];
     preferences.setString('token', token);
-    preferences.setString('is_logged_in', true);
+    preferences.setBool('is_logged_in', true);
   }
 
   register(String username, String email, String password) async {
@@ -37,7 +36,7 @@ class ApiServices {
     var api_root = await preferences.getString('api_root') as String;
 
     var response = await http.post(
-      Uri.parse(api_root + '/register'),
+      Uri.parse(api_root + '/user'),
       headers: <String, String>{'Content-Type': 'application/json'},
       body: jsonEncode(<String, String>{
         'username': username,
