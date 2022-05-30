@@ -4,8 +4,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic.main import BaseModel
+from sqlalchemy.orm import Session
 
 from datetime import datetime, timedelta
+from backend.src.interface.database.database import SessionLocal, engine
+from backend.src.interface.database.models import Base
 from backend.src.adapters.repository.recipe_repository import RecipeRepositoryImpl
 from backend.src.adapters.repository.user_repository import UserRepositoryImpl
 
@@ -15,6 +18,7 @@ from backend.src.domain.entities.recipe import Recipe
 from backend.src.interface.database.user_model import UserModel
 
 app = FastAPI()
+Base.metadata.create_all(bind=engine)
 
 origins = [
     "*"
@@ -45,6 +49,7 @@ class TokenData(BaseModel):
 
 class UserRegister(BaseModel):
     username: str
+    email: str
     password: str
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -56,11 +61,18 @@ def verify_password(plain_password: str, hashed_password: str):
 def get_password_hash(password):
     return pwd_context.hash(password)
 
-async def authenticate_user(username: str, password: str):
-    user = await UserRepository.get_by_name(name=username)
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+async def authenticate_user(username: str, password: str, db):
+    user = await UserRepository.get_by_name(db, name=username)
     if not user:
         return False
-    if not verify_password(password, user.hashed_password):
+    if not verify_password(password, user.hash_psswd):
         return False
     return user
 
@@ -79,7 +91,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 async def root():
     return {"message": "Hello World"}
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -97,15 +109,15 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     except JWTError:
         raise credentials_exception
 
-    user = await UserRepository.get_by_name(name=token_data.username)
+    user = await UserRepository.get_by_name(db,name=token_data.username)
     if user is None:
         raise credentials_exception
 
     return user
 
 @app.post("/token", response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = await authenticate_user(form_data.username, form_data.password)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = await authenticate_user(form_data.username, form_data.password, db)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -115,28 +127,29 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.name}, expires_delta=access_token_expires
+        data={"sub": user.name_user}, expires_delta=access_token_expires
     )
 
     return {"access_token": access_token, "token_type": "Bearer"}
 
 @app.post("/user/")
-async def register_user(user: UserRegister):
+async def register_user(user: UserRegister, db: Session = Depends(get_db)):
     hashed_password = get_password_hash(user.password)
 
-    await UserRepository.create(user.username, hashed_password)
+    UserRepository.create(db, user.username, user.email, hashed_password)
     return user
 
 @app.get("/recipe/{recipe_id}")
 async def get_recipe(
         recipe_id: int = Path(title="The ID of the item to get", ge=1),
-        current_user: User = Depends(get_current_user)
+        current_user: User = Depends(get_current_user),
+        db: Session = Depends(get_db)
 ):
-    return await RecipeRepository.get(recipe_id)
+    return await RecipeRepository.get(db, recipe_id)
 
 @app.post("/recipe/")
-async def register_recipe(recipe: Recipe, current_user: User = Depends(get_current_user)):
-    return await RecipeRepository.create(recipe)
+async def register_recipe(recipe: Recipe, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return await RecipeRepository.create(db, recipe, current_user)
 
 @app.put("/recipe/{recipe_id}")
 async def update_recipe(
