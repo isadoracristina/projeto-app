@@ -2,9 +2,10 @@ from unicodedata import name
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import func
 import datetime
-from sqlalchemy import insert, delete
 
 from backend.src.domain.ports.recipe_repository import RecipeRepository
+from .recipe_ingredient_repository import Recipe_IngredientRepositoryImpl
+from .recipe_tag_repository import Recipe_TagRepositoryImpl
 
 from backend.src.interface.database.fake_db import RECIPES as FakeDB_Recipes
 
@@ -14,6 +15,9 @@ from backend.src.domain.entities.ingredient import Ingredient
 
 from backend.src.interface.database.database import SessionLocal
 import backend.src.interface.database.models as models
+
+ingred_repo = Recipe_IngredientRepositoryImpl()
+tag_repo = Recipe_TagRepositoryImpl()
 
 class RecipeRepositoryImpl(RecipeRepository):
     async def get(self, db: Session, id: int) -> Recipe:
@@ -33,6 +37,12 @@ class RecipeRepositoryImpl(RecipeRepository):
         db.add(db_item)
         db.commit()
         db.refresh(db_item)
+        
+        for r in recipe.ingredients:
+            await ingred_repo.create(db, new_id, r)
+        for r in recipe.tags:
+            await tag_repo.create(db, new_id, r)
+
         return db_item
 
     async def update(self, db: Session, recipe: Recipe) -> Recipe:
