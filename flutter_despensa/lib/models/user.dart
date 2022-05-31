@@ -1,14 +1,18 @@
+import 'recipe.dart';
+
 class User {
   late int id;
   late String name;
   late String lastName;
+  late List<Recipe> recipes;
 
-  User({required this.id, required this.name, required this.lastName});
+  User({required this.id, required this.name, required this.lastName, required this.recipes});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     lastName = json['lastName'];
+    recipes = json['recipes'];
   }
 
   Map<String, dynamic> toJson() {
@@ -16,6 +20,7 @@ class User {
     data['id'] = id;
     data['name'] = name;
     data['lastName'] = lastName;
+    data['recipes'] = recipes;
     return data;
   }
 }

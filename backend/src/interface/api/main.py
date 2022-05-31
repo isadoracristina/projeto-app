@@ -145,7 +145,10 @@ async def get_recipe(
         current_user: User = Depends(get_current_user),
         db: Session = Depends(get_db)
 ):
-    return await RecipeRepository.get(db, recipe_id)
+    recipe = await RecipeRepository.get(db, recipe_id)
+    recipe.ingredients
+    recipe.tags
+    return recipe
 
 @app.post("/recipe/")
 async def register_recipe(recipe: Recipe, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):

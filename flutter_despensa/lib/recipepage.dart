@@ -68,10 +68,12 @@ class RecipePage extends StatelessWidget {
             ),
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                'assets/images/myrecipes.jpg',
+              child: Container(
+                color: Colors.orangeAccent,
                 height: 200,
                 width: 300,
+                child: const Text("Imagem da Receita",
+                  textAlign: TextAlign.center),
               ),
             ),
             const SizedBox(
@@ -88,6 +90,7 @@ class RecipePage extends StatelessWidget {
                 itemBuilder: (BuildContext ctxt, int index) {
                   return Container(
                     alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.all(3),
                     padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                     decoration: BoxDecoration(
                       color:Colors.orangeAccent,
