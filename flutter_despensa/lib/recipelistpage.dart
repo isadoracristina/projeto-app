@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'models/recipe.dart';
 import 'models/user.dart';
+import 'dart:convert';
 
-class RecipeListPage extends StatelessWidget {
+class RecipeListPage extends StatefulWidget {
 
+  @override
+  State<RecipeListPage> createState() => _RecipeListPageState();
+}
+
+class _RecipeListPageState extends State<RecipeListPage> {
   @override
   Widget build(BuildContext context) {
 
@@ -15,6 +22,22 @@ class RecipeListPage extends StatelessWidget {
   
     var user = User(id: 1, name: "Juca", lastName: "Silva", recipes: [recipe1, recipe2, recipe3]);
 
+    void remove(int index){
+      setState(() {
+        user.recipes.removeAt(index);
+      });
+    }
+
+    Future load() async {
+      var prefs = await SharedPreferences.getInstance();
+      var data = prefs.getString('data');
+
+      if(data != null) {
+        Iterable decoded = jsonDecode(data);
+
+      }
+
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -59,47 +82,56 @@ class RecipeListPage extends StatelessWidget {
                 physics: const ClampingScrollPhysics(),
                 itemCount: user.recipes.length,
                 itemBuilder: (BuildContext ctxt, int index) {
-                  return Container(
-                    height: 50,
-                    margin: const EdgeInsets.all(8),
-                    padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                    decoration: BoxDecoration(
-                      border:Border.all(
-                        color: Colors.orangeAccent
-                      ),
-                      borderRadius: BorderRadius.circular(10)
+                  return Dismissible(
+                    background: Container(
+                      color: const Color.fromARGB(255, 243, 192, 116).withOpacity(0.2),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(user.recipes[index].name),
-                        ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          physics: const ClampingScrollPhysics(),
-                          itemCount: user.recipes[index].tags.length,
-                          itemBuilder: (BuildContext context, int index2) {
-                            return Container(
-                              height: 30,
-                              alignment: Alignment.centerRight,
-                              margin: const EdgeInsets.all(3),
-                              padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                              decoration: BoxDecoration(
-                                color:const Color.fromARGB(255, 248, 190, 114),
-                                borderRadius: BorderRadius.circular(10)
-                              ),
-                              child: Center(
-                                child: Text(user.recipes[index].tags[index2],
-                                  style: const TextStyle(
-                                  color: Colors.white,
-                                  )
+                    key: Key(user.recipes[index].name),
+                    onDismissed: (direction){
+                      remove(index);
+                    },
+                    child: Container(
+                      height: 50,
+                      margin: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                      decoration: BoxDecoration(
+                        border:Border.all(
+                          color: Colors.orangeAccent
+                        ),
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(user.recipes[index].name),
+                          ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            physics: const ClampingScrollPhysics(),
+                            itemCount: user.recipes[index].tags.length,
+                            itemBuilder: (BuildContext context, int index2) {
+                              return Container(
+                                height: 30,
+                                alignment: Alignment.centerRight,
+                                margin: const EdgeInsets.all(3),
+                                padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                                decoration: BoxDecoration(
+                                  color:const Color.fromARGB(255, 248, 190, 114),
+                                  borderRadius: BorderRadius.circular(10)
                                 ),
-                              )
-                            );
-                          }
-                        )
-                      ],
-                    ) 
+                                child: Center(
+                                  child: Text(user.recipes[index].tags[index2],
+                                    style: const TextStyle(
+                                    color: Colors.white,
+                                    )
+                                  ),
+                                )
+                              );
+                            }
+                          )
+                        ],
+                      ) 
+                    )
                   );
                 },
               ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'loginpage.dart';
 import 'userpage.dart';
 import 'newrecipepage.dart';
+import 'recipepage.dart';
+import 'recipelistpage.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'api_service.dart';
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: NewRecipePage(),
+      home: RecipeListPage(),
     );
   }
 }
