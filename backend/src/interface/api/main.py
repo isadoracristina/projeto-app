@@ -145,9 +145,15 @@ async def get_recipe(
         current_user: User = Depends(get_current_user),
         db: Session = Depends(get_db)
 ):
-    recipe = await RecipeRepository.get(db, recipe_id)
-    recipe.ingredients
-    recipe.tags
+    recipe_model = await RecipeRepository.get(db, recipe_id)
+    recipe_model.prep_time = 10
+    recipe = Recipe(id=recipe_model.id_recipe, id_user=recipe_model.id_user,
+                    name=recipe_model.name_recipe, img_addr=recipe_model.img_addr,
+                    preparation_time_sec=recipe_model.prep_time, preparation_method= recipe_model.prep_method,
+                    rating=recipe_model.rating, observation=recipe_model.observation,
+                    last_made=recipe_model.last_made, pantry_only=recipe_model.pantry_only,
+                    ingredients=recipe_model.ingredients, tags=recipe_model.tags)
+
     return recipe
 
 @app.post("/recipe/")
@@ -167,4 +173,4 @@ async def get_all_recipes(
         current_user: User = Depends(get_current_user),
         db: Session = Depends(get_db)
 ):
-    return await RecipeRepository.get_all(db, user_id=current_user.id_user)
+    return await RecipeRepository.get_all(db, user_id=current_user.id_user) 
