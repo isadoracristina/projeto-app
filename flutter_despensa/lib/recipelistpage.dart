@@ -26,6 +26,9 @@ class _RecipeListPageState extends State<RecipeListPage> {
     var recipe3 = Recipe(id: 3, name: "Waffle3", time: 20, picture: "abc", tags: ["café", "pratica"], ingredients: ["farinha", "ovos"], preparation: "Misture tudo", classification: 4);
   
     var user = User(id: 1, name: "Juca", lastName: "Silva", recipes: [recipe1, recipe2, recipe3]);
+    //var user = User(id: 1, name: "Juca", lastName: "Silva", recipes: []);
+
+    
 
     void remove(int index){
       setState(() {

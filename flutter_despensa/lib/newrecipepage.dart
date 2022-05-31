@@ -5,18 +5,91 @@ import 'recipelistpage.dart';
 import 'models/recipe.dart';
 import 'api_service.dart';
 
-class NewRecipePage extends StatelessWidget {
-  teste() async {
-    var api_service = ApiServices();
-    await api_service.register('leroy', 'leroy@email.com', 'senhaleroy');
-    await api_service.login('leroy', 'senhaleroy');
-    var result = await api_service.getRecipeById(1);
-    print(result);
+class NewRecipePage extends StatefulWidget {
+  @override
+  State<NewRecipePage> createState() => _NewRecipePageState();
+}
+
+class _NewRecipePageState extends State<NewRecipePage> {
+  // teste() async {
+  //   var api_service = ApiServices();
+  //   await api_service.register('leroy', 'leroy@email.com', 'senhaleroy');
+  //   await api_service.login('leroy', 'senhaleroy');
+  //   var result = await api_service.getRecipeById(1);
+  //   print(result);
+  // }
+
+  late TextEditingController inputrecipename;
+  late TextEditingController inputrecipetime;
+  late TextEditingController inputrecipepreparations;
+  late TextEditingController inputrecipetag;
+  
+  String tag = "";
+
+  @override
+  void initState (){
+    super.initState();
+
+    inputrecipename = TextEditingController();
+    inputrecipetime = TextEditingController();
+    inputrecipepreparations = TextEditingController();
+    inputrecipetag = TextEditingController();
   }
 
   @override
+  void dispose(){
+    inputrecipetag.dispose();
+
+    super.dispose();
+
+  }
+
+  void addIngredient(){
+    setState(() {
+      
+    });
+  }
+
+  void addTag(){
+    setState(() {
+      
+    });
+  }
+
+
+
+  @override
+
+      Future openDialog() => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Inclua uma TAG",
+          style: TextStyle(
+            color: Colors.orangeAccent
+          ),
+        ),
+        content: TextField(
+          controller: inputrecipetag,
+          decoration: const InputDecoration(
+            hintText: "prática, café, rápida..."
+          ),
+        ),
+        actions: [
+          TextButton(
+            autofocus: true,
+            child: const Text("ADICIONAR"),
+            onPressed: submit()
+          )
+        ],
+      )
+    );
+
+    submit(){
+      Navigator.of(context).pop(inputrecipetag.text);
+    }
+    
   Widget build(BuildContext context) {
-    teste();
+    //teste();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 241, 147, 58),
@@ -59,6 +132,7 @@ class NewRecipePage extends StatelessWidget {
               height: 5,
             ),
             TextFormField(
+              controller: inputrecipename,
               maxLines: 1,
               decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -90,7 +164,12 @@ class NewRecipePage extends StatelessWidget {
               height: 10,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () async {
+                final tag = await openDialog();
+                setState(() {
+                  this.tag = tag;
+                });
+              },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
                 shadowColor: const Color.fromARGB(255, 241, 147, 58),
@@ -139,6 +218,7 @@ class NewRecipePage extends StatelessWidget {
               height: 5,
             ),
             TextFormField(
+              controller: inputrecipetime,
               maxLines: 1,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
@@ -162,6 +242,7 @@ class NewRecipePage extends StatelessWidget {
               height: 5,
             ),
             TextFormField(
+              controller: inputrecipepreparations,
               decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
@@ -186,5 +267,8 @@ class NewRecipePage extends StatelessWidget {
         ),
       ),
     );
+
+
   }
 }
+
