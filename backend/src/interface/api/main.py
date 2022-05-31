@@ -11,9 +11,11 @@ from backend.src.interface.database.database import SessionLocal, engine
 from backend.src.interface.database.models import Base
 from backend.src.adapters.repository.recipe_repository import RecipeRepositoryImpl
 from backend.src.adapters.repository.user_repository import UserRepositoryImpl
+from backend.src.adapters.repository.ingredient_repository import IngredientRepositoryImpl
 
 from backend.src.domain.entities.user import User
 from backend.src.domain.entities.recipe import Recipe
+from backend.src.domain.entities.ingredient import Ingredient
 
 from backend.src.interface.database.user_model import UserModel
 
@@ -35,6 +37,7 @@ app.add_middleware(
 
 UserRepository = UserRepositoryImpl()
 RecipeRepository = RecipeRepositoryImpl()
+IngredientRepository = IngredientRepositoryImpl()
 
 SECRET_KEY = "feb5eb835a3fff5567272d7ddfd93c0c28c7151a38c04fc6d5d65aece6a10f66"
 ALGORITHM = "HS256"
@@ -168,3 +171,28 @@ async def get_all_recipes(
         db: Session = Depends(get_db)
 ):
     return await RecipeRepository.get_all(db, user_id=current_user.id_user)
+
+@app.get("/ingredient/{ingredient_id}")
+async def get_ingredient(
+    ingredient_id: int = Path(title="The ID of the item to get", ge=1),
+    currrent_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+
+    return await IngredientRepository.get(db, ingredient_id=ingredient_id)
+
+@app.post("/ingredient/")
+async def register_ingredient(
+    ingredient: Ingredient,
+    db: Session = Depends(get_db)
+):
+    
+    return await IngredientRepository.create(db, ingredient)
+
+@app.get("/ingredient/")
+async def get_all_ingredients(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+
+    return await IngredientRepository.get_all(db) 
