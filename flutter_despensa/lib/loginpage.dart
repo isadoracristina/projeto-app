@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                     maxLines: 1,
                     decoration: InputDecoration(
                       hintText: 'Usuário',
-                      prefixIcon  : const Icon(Icons.email),
+                      prefixIcon: const Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                     activeColor: Theme.of(context).colorScheme.primary,
                     onChanged: (newValue) {
                       setState(() {
-                        rememberValue = newValue!;
+                          rememberValue = newValue!;
                       });
                     },
                     controlAffinity: ListTileControlAffinity.leading,
@@ -92,15 +92,15 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                   ),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: ()  {
                       if (_formKey.currentState!.validate()) {
                         api_service.login(inputname.text, inputpassword.text);
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UserPage(inputname.text)
-                        )
-                      );
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                            UserPage(inputname.text)));
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -127,15 +127,14 @@ class _LoginPageState extends State<LoginPage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  const RegisterPage(title: 'Register UI'),
+                              const RegisterPage(title: 'Register UI'),
                             ),
                           );
                         },
                         child: const Text(
                           'Registre-se',
                           style: TextStyle(
-                            color: Color.fromARGB(255, 241, 147, 58)
-                          ),
+                            color: Color.fromARGB(255, 241, 147, 58)),
                         ),
                       ),
                     ],

@@ -7,7 +7,7 @@ class RecipePage extends StatelessWidget {
 
 
   var recipe = Recipe(id: 1, name: "Waffle", time: 20, picture: "abc", tags: ["café", "pratica"], ingredients: ["farinha", "ovos"], preparation: "Misture tudo", classification: 4);
-  
+
 
   @override
   Widget build(BuildContext context) {

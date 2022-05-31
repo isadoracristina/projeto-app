@@ -125,17 +125,16 @@ class _RegisterPageState extends State<RegisterPage> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        if (_formKey.currentState!.validate()) {
-                          api_service.register(inputname.text, inputmail.text, inputpassword.text);
+                          if (_formKey.currentState!.validate()) {
+                            api_service.register(inputname.text,
+                              inputmail.text, inputpassword.text);
                         }
                         Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => UserPage(inputname.text)
-                          )
-                        );
-                      }
-                    );
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    LoginPage(title: "titulo")));
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
