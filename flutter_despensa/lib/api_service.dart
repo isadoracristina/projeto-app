@@ -68,9 +68,22 @@ class ApiServices {
     var api_root = await preferences.getString('api_root') as String;
 
     var response = await http
-    .get(Uri.parse(api_root + '/user/me'), headers: <String, String>{
-        'Authorization': await preferences.getString('token') as String,
+        .get(Uri.parse(api_root + '/user/me'), headers: <String, String>{
+      'Authorization': await preferences.getString('token') as String,
     });
+
+    return json.decode(response.body);
+  }
+
+  getAllRecipes() async {
+    var preferences = await SharedPreferences.getInstance();
+    var api_root = await preferences.getString('api_root') as String;
+
+    var response = await http
+        .get(Uri.parse(api_root + '/recipe/'), headers: <String, String>{
+      'Authorization': await preferences.getString('token') as String,
+    });
+
 
     return json.decode(response.body);
   }
