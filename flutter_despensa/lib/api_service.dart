@@ -1,3 +1,4 @@
+import 'package:flutter_despensa/models/recipe.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -43,7 +44,6 @@ class ApiServices {
         'email': email,
         'password': password
       }),
-
     );
 
     // Tratar caso resposta não seja OK
@@ -75,7 +75,7 @@ class ApiServices {
     return json.decode(response.body);
   }
 
-  getAllRecipes() async {
+  Future<List<Recipe>> getAllRecipes() async {
     var preferences = await SharedPreferences.getInstance();
     var api_root = await preferences.getString('api_root') as String;
 
@@ -84,7 +84,9 @@ class ApiServices {
       'Authorization': await preferences.getString('token') as String,
     });
 
+    var recipe_list = json.decode(response.body) as List;
+    var recipes = recipe_list.map((r) => Recipe.fromJson(r)).toList();
 
-    return json.decode(response.body);
+    return recipes;
   }
 }
