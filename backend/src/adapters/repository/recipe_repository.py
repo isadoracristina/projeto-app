@@ -1,9 +1,8 @@
 from unicodedata import name
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import func
-import datetime
-from sqlalchemy import insert, delete
 from typing import List
+import datetime
 
 from backend.src.domain.ports.recipe_repository import RecipeRepository
 from .recipe_ingredient_repository import Recipe_IngredientRepositoryImpl
@@ -22,10 +21,10 @@ ingred_repo = Recipe_IngredientRepositoryImpl()
 tag_repo = Recipe_TagRepositoryImpl()
 
 class RecipeRepositoryImpl(RecipeRepository):
-    async def get(self, db: Session, id: int) -> Recipe:
+    async def get(self, db: Session, id: int) -> models.Recipe:
         return db.query(models.Recipe).filter(models.Recipe.id_recipe == id).first()
 
-    async def create(self, db: Session, recipe: Recipe, user: User) -> Recipe:
+    async def create(self, db: Session, recipe: Recipe, user: User) -> models.Recipe:
         new_id = SessionLocal().query(func.max(models.Recipe.id_recipe)).scalar()
         if new_id == None:
             new_id = 1
@@ -47,7 +46,7 @@ class RecipeRepositoryImpl(RecipeRepository):
 
         return db_item
 
-    async def update(self, db: Session, recipe: Recipe) -> Recipe:
+    async def update(self, db: Session, recipe: Recipe) -> models.Recipe:
         if recipe.id not in FakeDB_Recipes:
             return NotImplementedError
 

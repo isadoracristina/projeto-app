@@ -1,6 +1,8 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'loginpage.dart';
+import 'userpage.dart';
+import 'api_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key, required this.title}) : super(key: key);
@@ -12,7 +14,15 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+
+  var api_service = ApiServices();
+
   var rememberValue = false;
+
+  var inputname = TextEditingController();
+  var inputlastname = TextEditingController();
+  var inputmail = TextEditingController();
+  var inputpassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +52,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     children: [
                       Expanded(
                         child: TextFormField(
-                          validator: (value) => EmailValidator.validate(value!)
-                              ? null
-                              : "Endereço de email inválido",
+                          controller: inputname,
                           maxLines: 1,
                           decoration: InputDecoration(
                             hintText: 'Nome',
@@ -60,9 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       Expanded(
                         child: TextFormField(
-                          validator: (value) => EmailValidator.validate(value!)
-                              ? null
-                              : "Endereço de email inválido",
+                          controller: inputlastname,
                           maxLines: 1,
                           decoration: InputDecoration(
                             hintText: 'Sobrenome',
@@ -79,6 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 20,
                   ),
                   TextFormField(
+                    controller: inputmail,
                     validator: (value) => EmailValidator.validate(value!)
                         ? null
                         : "Endereço de email inválido",
@@ -95,6 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 20,
                   ),
                   TextFormField(
+                    controller: inputpassword,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor, informe sua senha';
@@ -116,11 +124,22 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {}
+                      setState(() {
+                        if (_formKey.currentState!.validate()) {
+                          api_service.register(inputname.text, inputmail.text, inputpassword.text);
+                        }
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UserPage(inputname.text)
+                          )
+                        );
+                      }
+                    );
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
-                      shadowColor: Color.fromARGB(255, 241, 147, 58),
+                      shadowColor: const Color.fromARGB(255, 241, 147, 58),
                     ),
                     child: const Text(
                       'Registrar',

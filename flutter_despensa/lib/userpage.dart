@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_despensa/recipelistpage.dart';
 import 'main.dart';
+import 'recipelistpage.dart';
 
-class UserPage extends StatelessWidget {
+class UserPage extends StatefulWidget {
 
+  String name;
+
+  UserPage(this.name);
+  
+  @override
+  State<UserPage> createState() => _UserPageState();
+}
+
+class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,9 +46,9 @@ class UserPage extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),            
-            const Text('Usuário',
+            Text(widget.name,
             textAlign: TextAlign.left,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Color.fromARGB(255, 241, 147, 58),
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -57,13 +68,24 @@ class UserPage extends StatelessWidget {
                     width: 300,
                   ),
                 ),
-                const Text('Minhas\nReceitas',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 40,
-                  ),
-                )
+                InkWell(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((context) => RecipeListPage()
+                        )
+                      )
+                    );
+                  },
+                  child: const Text('Minhas\nReceitas',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 40,
+                    ),
+                  )
+                ) 
               ],
             ),
             const SizedBox(

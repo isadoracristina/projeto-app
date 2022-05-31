@@ -12,8 +12,14 @@ from backend.src.interface.database.database import SessionLocal
 import backend.src.interface.database.models as models
 
 class IngredientRepositoryImpl(IngredientRepository):
-    async def get(self, db: Session, ingredient_id: int):
-        return db.query(models.Ingredient).filter(models.Ingredient.id_ingredient == ingredient_id).first()
+    async def get(self, db: Session, id: int):
+        return db.query(models.Ingredient).filter(models.Ingredient.id_ingredient == id).first()
+        
+    async def get_by_name(self, db: Session, name: str):
+        return db.query(models.Ingredient).filter(models.Ingredient.name_ingredient == name).first()
+
+    async def get_all(self, db: Session):
+        return db.query(models.Ingredient).all()
 
     async def create(self, db: Session, ingredient: Ingredient) -> Ingredient:
         new_id = SessionLocal().query(func.max(models.Ingredient.id_ingredient)).scalar()
@@ -28,6 +34,3 @@ class IngredientRepositoryImpl(IngredientRepository):
         db.refresh(db_item)
 
         return db_item
-    
-    async def get_all(self, db: Session) -> List[Ingredient]:
-        return db.query(models.Ingredient).all()

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_despensa/models/recipe.dart';
+import 'package:flutter_despensa/recipelistpage.dart';
 import 'models/recipe.dart';
 
 class RecipePage extends StatelessWidget {
@@ -21,7 +22,14 @@ class RecipePage extends StatelessWidget {
         actions: <Widget> [
           IconButton(
             icon: const Icon(Icons.arrow_back_rounded),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RecipeListPage()
+                )
+              );
+            },
           ),
           IconButton(
             icon: const Icon(Icons.menu),
