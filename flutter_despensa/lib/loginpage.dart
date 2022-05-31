@@ -1,6 +1,7 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'registerpage.dart';
+import 'userpage.dart';
+import 'api_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, required this.title}) : super(key: key);
@@ -13,6 +14,11 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   var rememberValue = false;
+
+  var api_service = ApiServices();
+
+  var inputname = TextEditingController();
+  var inputpassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +45,10 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   TextFormField(
-                    validator: (value) => EmailValidator.validate(value!)
-                        ? null
-                        : "Endereço de email inválido",
+                    controller: inputname,
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: 'Email',
+                      hintText: 'Usuário',
                       prefixIcon  : const Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -55,6 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                   ),
                   TextFormField(
+                    controller: inputpassword,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor, informe sua senha';
@@ -88,7 +93,15 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {}
+                      if (_formKey.currentState!.validate()) {
+                        api_service.login(inputname.text, inputpassword.text);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserPage(inputname.text)
+                        )
+                      );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),

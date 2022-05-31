@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: RecipeListPage(),
+      home: HomePage(),
     );
   }
 }
@@ -43,13 +43,13 @@ class HomePage extends StatelessWidget {
           width: 145,
           alignment: Alignment.topLeft,
         ),
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
         InkWell(
           child: RichText(
               textAlign: TextAlign.center,
-              text: TextSpan(children: <TextSpan>[
+              text: const TextSpan(children: <TextSpan>[
                 TextSpan(
                   text: "Des",
                   style: TextStyle(
@@ -71,7 +71,7 @@ class HomePage extends StatelessWidget {
                     builder: (context) => LoginPage(title: 'Login UI')));
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
         Image.asset(

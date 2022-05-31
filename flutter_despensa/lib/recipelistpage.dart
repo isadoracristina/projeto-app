@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_despensa/newrecipepage.dart';
+import 'package:flutter_despensa/recipepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'models/recipe.dart';
 import 'models/user.dart';
 import 'dart:convert';
+import 'userpage.dart';
+import 'recipepage.dart';
+import 'newrecipepage.dart';
 
 class RecipeListPage extends StatefulWidget {
 
@@ -50,7 +55,14 @@ class _RecipeListPageState extends State<RecipeListPage> {
         actions: <Widget> [
           IconButton(
             icon: const Icon(Icons.arrow_back_rounded),
-            onPressed: () {},
+            onPressed: () {
+              // Navigator.pushReplacement(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: ((context) => UserPage())
+              //   )
+              // );
+            },
           ),
           IconButton(
             icon: const Icon(Icons.menu),
@@ -62,20 +74,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: <Widget>[
-            TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10)                  
-                ),
-                hintText: "Digite o nome da receita",
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.filter_alt),
-                  onPressed: () {},
-                )
-              ),
-            ),
-            Container(
+              Container(
               padding: const EdgeInsets.all(20),
               child: ListView.builder(
                 shrinkWrap: true,
@@ -103,7 +102,17 @@ class _RecipeListPageState extends State<RecipeListPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(user.recipes[index].name),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: ((context) => RecipePage())
+                                )
+                              );
+                            },
+                            child: Text(user.recipes[index].name),
+                          ),
                           ListView.builder(
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
@@ -136,34 +145,76 @@ class _RecipeListPageState extends State<RecipeListPage> {
                 },
               ),
             ),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
-                shadowColor: const Color.fromARGB(255, 241, 147, 58),
-              ),
-              child: RichText(
-                text: const TextSpan(
-                  children: [
-                    WidgetSpan(
-                      child: Icon(Icons.add,
-                        color: Colors.white,
-                        size: 15),
-                    ),
-                    TextSpan(
-                      text: "Nova Receita ",
-                        style: TextStyle(
-                          color: Colors.white
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((context) => NewRecipePage())
+                      )
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
+                    shadowColor: const Color.fromARGB(255, 241, 147, 58),
+                  ),
+                  child: RichText(
+                    text: const TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Icon(Icons.add,
+                            color: Colors.white,
+                            size: 15),
+                        ),
+                        TextSpan(
+                          text: "Nova Receita",
+                            style: TextStyle(
+                              color: Colors.white
+                            )
                         )
-                    )
-                  ]
+                      ]
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ],
+                ElevatedButton(
+                  onPressed: () {
+                    // Navigator.pushReplacement(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: ((context) => NewRecipePage())
+                    //   )
+                    // );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
+                    shadowColor: const Color.fromARGB(255, 241, 147, 58),
+                  ),
+                  child: RichText(
+                    text: const TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Icon(Icons.filter_alt,
+                            color: Colors.white,
+                            size: 15),
+                        ),
+                        TextSpan(
+                          text: "Filtrar Receitas",
+                            style: TextStyle(
+                              color: Colors.white
+                            )
+                        )
+                      ],
+                    )
+                  )
+                )
+              ]
+            )
+          ]
         )
       )   
-    );
-    
+    );    
   }
 }

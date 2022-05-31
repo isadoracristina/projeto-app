@@ -43,6 +43,7 @@ class ApiServices {
         'email': email,
         'password': password
       }),
+
     );
 
     // Tratar caso resposta não seja OK
