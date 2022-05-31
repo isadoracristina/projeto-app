@@ -159,3 +159,9 @@ async def update_recipe(
 ):
     return await RecipeRepository.update(recipe)
 
+@app.get("/recipe/")
+async def get_all_recipes(
+        current_user: User = Depends(get_current_user),
+        db: Session = Depends(get_db)
+):
+    return await RecipeRepository.get_all(db, user_id=current_user.id_user)

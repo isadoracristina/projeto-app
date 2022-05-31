@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import func
 import datetime
 from sqlalchemy import insert, delete
+from typing import List
 
 from backend.src.domain.ports.recipe_repository import RecipeRepository
 
@@ -48,3 +49,5 @@ class RecipeRepositoryImpl(RecipeRepository):
         del FakeDB_Recipes[recipe.id]["id"]
         return recipe
 
+    async def get_all(self, db: Session, user_id: int) -> List[Recipe]:
+        return db.query(models.Recipe).filter(models.Recipe.id_user == user_id).all()
