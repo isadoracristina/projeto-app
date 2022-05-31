@@ -140,6 +140,13 @@ async def register_user(user: UserRegister, db: Session = Depends(get_db)):
     user_created = UserRepository.create(db, user.username, user.email, hashed_password)
     return user_created
 
+@app.get("/user/me")
+async def get_user(
+        current_user: User = Depends(get_current_user)
+):
+    return current_user
+
+
 @app.get("/recipe/{recipe_id}")
 async def get_recipe(
         recipe_id: int = Path(title="The ID of the item to get", ge=1),
