@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_despensa/api_service.dart';
 import 'loginpage.dart';
-
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 void main() async {
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    if (kReleaseMode)
+    exit(1);
+  };
+
   final preferences = await SharedPreferences.getInstance();
   await preferences.setString('api_root', 'http://127.0.0.1:8000');
+
   runApp(const MyApp());
 }
 
