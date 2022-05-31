@@ -1,4 +1,5 @@
 venv/
+venv-despensa/
 *.pyc
 
 # See https://www.dartlang.org/guides/libraries/private-files
