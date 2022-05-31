@@ -8,19 +8,34 @@ class Recipe {
   late String preparation;
   late int classification;
 
-  Recipe({required this.id, required this.name, required this.time,
-    required this.picture, required this.tags, required this.ingredients,
-    required this.preparation, required this.classification});
+  Recipe(
+      {required this.id,
+      required this.name,
+      required this.time,
+      required this.picture,
+      required this.tags,
+      required this.ingredients,
+      required this.preparation,
+      required this.classification});
 
   Recipe.fromJson(Map<String, dynamic> json) {
+    var ing_list = json['ingredients'] as List;
+    var tag_list = json['tags'] as List;
+
+    print(tag_list);
+    print(ing_list);
+    List<String> tagList =
+        tag_list.map((i) => Tag.fromJson(i).toString()).toList();
+    List<String> ingredientList = ing_list.map((i) => Ingredient.fromJson(i).toString()).toList();
+
     id = json['id'];
     name = json['name'];
-    time = json['time'];
-    picture = json['picture'];
-    tags = json['tags'];
-    ingredients = json['ingredients'];
-    preparation = json['preparation'];
-    classification = json['classification'];
+    time = json['preparation_time_sec'] / 60;
+    //picture = json['picture'];
+    tags = tagList;
+    ingredients = ingredientList;
+    preparation = json['preparation_method'];
+    classification = json['rating'];
   }
 
   Map<String, dynamic> toJson() {
@@ -34,5 +49,32 @@ class Recipe {
     data['preparation'] = preparation;
     data['classification'] = classification;
     return data;
+  }
+}
+
+class Tag {
+  late int id;
+
+  Tag({required this.id});
+
+  Tag.fromJson(Map<String, dynamic> parsedJson) {
+    id:
+    parsedJson['id_tag'];
+  }
+}
+
+class Ingredient {
+  late int id;
+  late int amount;
+  late String measurement;
+
+  Ingredient(
+      {required this.id, required this.amount, required this.measurement});
+
+  Ingredient.fromJson(Map<String, dynamic> parsedJson) {
+    Ingredient(
+        id: parsedJson['id_ingredient'],
+        amount: parsedJson['amount'],
+        measurement: parsedJson['measurement']);
   }
 }
