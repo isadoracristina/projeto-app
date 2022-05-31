@@ -38,16 +38,20 @@ CREATE TABLE Tags
 
 CREATE TABLE Recipe_Ingredients
 (
-	id_recipe INT PRIMARY KEY NOT NULL,
+	id_recipe INT NOT NULL,
     	id_ingredient INT NOT NULL,
+	amount INT NOT NULL,
+	measurement VARCHAR(30) NOT NULL,
     	FOREIGN KEY (id_recipe) REFERENCES Recipes(id_recipe),
-    	FOREIGN KEY (id_ingredient) REFERENCES Ingredients(id_ingredient)
+    	FOREIGN KEY (id_ingredient) REFERENCES Ingredients(id_ingredient),
+	PRIMARY KEY(id_recipe,id_ingredient)
 );
 
 CREATE TABLE Recipe_Tags
 (
-	id_recipe INT PRIMARY KEY NOT NULL,
+	id_recipe INT NOT NULL,
     	id_tag INT NOT NULL,
     	FOREIGN KEY (id_recipe) REFERENCES Recipes(id_recipe),
-    	FOREIGN KEY (id_tag) REFERENCES Tags(id_tag)
+    	FOREIGN KEY (id_tag) REFERENCES Tags(id_tag),
+	PRIMARY KEY(id_recipe,id_tag)
 );
