@@ -137,8 +137,8 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 async def register_user(user: UserRegister, db: Session = Depends(get_db)):
     hashed_password = get_password_hash(user.password)
 
-    UserRepository.create(db, user.username, user.email, hashed_password)
-    return user
+    user_created = UserRepository.create(db, user.username, user.email, hashed_password)
+    return user_created
 
 @app.get("/recipe/{recipe_id}")
 async def get_recipe(
