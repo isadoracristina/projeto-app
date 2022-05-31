@@ -61,4 +61,16 @@ class ApiServices {
     // Tratar caso resposta não seja OK
     return json.decode(response.body);
   }
+
+  getUser() async {
+    var preferences = await SharedPreferences.getInstance();
+    var api_root = await preferences.getString('api_root') as String;
+
+    var response = await http
+    .get(Uri.parse(api_root + '/user/me'), headers: <String, String>{
+        'Authorization': await preferences.getString('token') as String,
+    });
+
+    return json.decode(response.body);
+  }
 }
