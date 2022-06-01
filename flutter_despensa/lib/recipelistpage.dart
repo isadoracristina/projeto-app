@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'userpage.dart';
 import 'recipepage.dart';
 import 'newrecipepage.dart';
+import 'filterpage.dart';
 
 class RecipeListPage extends StatefulWidget {
   @override
@@ -183,12 +184,12 @@ Future<List<Recipe>> getRecipes() async {
                     ),
                     ElevatedButton(
                         onPressed: () {
-                          // Navigator.pushReplacement(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: ((context) => NewRecipePage())
-                          //   )
-                          // );
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                            builder: ((context) => FilterPage())
+                            )
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
