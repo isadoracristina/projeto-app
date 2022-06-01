@@ -113,7 +113,7 @@ Future<List<Recipe>> getRecipes() async {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: ((context) =>
-                                                        RecipePage())));
+                                                        RecipePage(snapshot.data![index]))));
                                           },
                                           child:
                                               Text(snapshot.data![index].name),
@@ -121,42 +121,33 @@ Future<List<Recipe>> getRecipes() async {
                                         ListView.builder(
                                             scrollDirection: Axis.horizontal,
                                             shrinkWrap: true,
-                                            physics:
-                                                const ClampingScrollPhysics(),
+                                            physics: const ClampingScrollPhysics(),
                                             itemCount: snapshot
                                                 .data![index].tags.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index2) {
+                                            itemBuilder: (BuildContext context, int index2) {
                                               return Container(
-                                                  height: 30,
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  margin:
-                                                      const EdgeInsets.all(3),
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          5, 5, 5, 5),
-                                                  decoration: BoxDecoration(
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              248,
-                                                              190,
-                                                              114),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10)),
-                                                  child: Center(
-                                                    child: Text(
-                                                        snapshot.data![index]
-                                                            .tags[index2],
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
-                                                        )),
-                                                  ));
-                                            })
+                                                height: 30,
+                                                alignment: Alignment.centerRight,
+                                                margin: const EdgeInsets.all(3),
+                                                padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                                                decoration: BoxDecoration(
+                                                  color:const Color.fromARGB(255, 248,190,114),
+                                                  borderRadius: BorderRadius.circular(10)
+                                                ),
+                                                child: Center(
+                                                  child: Text(snapshot.data![index].tags[index2],
+                                                    style: const TextStyle(
+                                                    color: Colors.white,
+                                                    )
+                                                  ),
+                                                )
+                                              );
+                                            }
+                                        )
                                       ],
-                                    )));
+                                    )
+                                  )
+                                );
                           },
                         );
                       } else {

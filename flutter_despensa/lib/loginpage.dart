@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                     maxLines: 1,
                     decoration: InputDecoration(
                       hintText: 'Usuário',
-                      prefixIcon: const Icon(Icons.email),
+                      prefixIcon: const Icon(Icons.person),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

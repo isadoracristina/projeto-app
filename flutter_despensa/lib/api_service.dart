@@ -89,4 +89,59 @@ class ApiServices {
 
     return recipes;
   }
+
+  Future<List<Ingredient>> getAllIngredients() async {
+    var preferences = await SharedPreferences.getInstance();
+    var api_root = await preferences.getString('api_root') as String;
+
+    var response = await http
+        .get(Uri.parse(api_root + '/ingredient/'), headers: <String, String>{
+      'Authorization': await preferences.getString('token') as String,
+    });
+
+    var ingredient_list = json.decode(response.body) as List;
+    print(ingredient_list);
+    var ingredients =
+        ingredient_list.map((r) => Ingredient.fromJson(r)).toList();
+
+    return ingredients;
+  }
+
+  Future<List<Recipe>> getRecipesFilteredByIngredients(
+      List<Ingredient> filter) async {
+    var preferences = await SharedPreferences.getInstance();
+    var api_root = await preferences.getString('api_root') as String;
+
+    var response = await http.post(
+        Uri.parse(api_root + '/recipe/filter/ingredient'),
+        headers: <String, String>{
+          'Authorization': await preferences.getString('token') as String,
+        },
+        body: <String, String>{
+          'ingredients_list': jsonEncode(filter),
+        });
+
+    var recipe_list = json.decode(response.body) as List;
+    var recipes = recipe_list.map((r) => Recipe.fromJson(r)).toList();
+
+    return recipes;
+  }
+
+  Future<List<Recipe>> getRecipesFilteredByTags(List<Tag> filter) async {
+    var preferences = await SharedPreferences.getInstance();
+    var api_root = await preferences.getString('api_root') as String;
+
+    var response = await http.post(Uri.parse(api_root + '/recipe/filter/tag'),
+        headers: <String, String>{
+          'Authorization': await preferences.getString('token') as String,
+        },
+        body: <String, String>{
+          'tag_list': jsonEncode(filter),
+        });
+
+    var recipe_list = json.decode(response.body) as List;
+    var recipes = recipe_list.map((r) => Recipe.fromJson(r)).toList();
+
+    return recipes;
+  }
 }

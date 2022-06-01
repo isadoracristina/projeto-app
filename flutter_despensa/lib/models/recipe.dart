@@ -6,7 +6,7 @@ class Recipe {
   late List<String> tags;
   late List<String> ingredients;
   late String preparation;
-  late int classification;
+  late double classification;
 
   Recipe(
       {required this.id,
@@ -22,15 +22,13 @@ class Recipe {
     var ing_list = json['ingredients'] as List;
     var tag_list = json['tags'] as List;
 
-    print(tag_list);
-    print(ing_list);
     List<String> tagList =
         tag_list.map((i) => Tag.fromJson(i).toString()).toList();
     List<String> ingredientList = ing_list.map((i) => Ingredient.fromJson(i).toString()).toList();
 
     id = json['id'];
     name = json['name'];
-    time = json['preparation_time_sec'] / 60;
+    time = json['preparation_time_sec'] ~/ 60;
     //picture = json['picture'];
     tags = tagList;
     ingredients = ingredientList;
@@ -58,6 +56,7 @@ class Tag {
   Tag({required this.id});
 
   Tag.fromJson(Map<String, dynamic> parsedJson) {
+    print(parsedJson);
     id:
     parsedJson['id_tag'];
   }
@@ -65,7 +64,7 @@ class Tag {
 
 class Ingredient {
   late int id;
-  late int amount;
+  late double amount;
   late String measurement;
 
   Ingredient(
