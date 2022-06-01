@@ -121,7 +121,7 @@ Future<List<Recipe>> getRecipes() async {
                                                         RecipePage(widget.recipes[index]))));
                                           },
                                           child:
-                                              Text(snapshot.data![index].name),
+                                              Text(widget.recipes[index].name),
                                         ),
                                         ListView.builder(
                                             scrollDirection: Axis.horizontal,

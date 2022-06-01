@@ -142,13 +142,6 @@ class _FilterPageState extends State<FilterPage> {
                   .getRecipesFilteredByIngredients(selected_ingredients);
 
               print(byIngredientList);
-              //var byTagList =
-              //await api_service.getRecipesFilteredByTags(widget.recipes);
-
-              //var list = [byIngredientList, byTagList];
-
-              //final common = list.fold<Set>(
-              //  list.first.toSet(), (a, b) => a.intersection(b.toSet()));
 
               Navigator.pushReplacement(
                 context,
@@ -158,7 +151,6 @@ class _FilterPageState extends State<FilterPage> {
                 )
               );
             },
-              
           ),
         ],
       ),

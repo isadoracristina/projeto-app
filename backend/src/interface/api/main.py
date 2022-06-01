@@ -311,22 +311,22 @@ async def register_tag(
 
 @app.post("/recipe/filter/ingredient/")
 async def get_filtered_recipes(
-    ingredients: List[Ingredient],
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+        ingredients: List[Ingredient],
+        current_user: User = Depends(get_current_user),
+        recipes: List[Recipe] = Depends(get_all_recipes),
+        db: Session = Depends(get_db)
 ):
 
-    recipes = await RecipeRepository.get_all(db, current_user.id)
     filter_service = FilterService()
     return filter_service.filter_by_ingredient(recipes, ingredients)
 
 @app.post("/recipe/filter/tag/")
 async def get_filtered_recipes(
-    tags: List[Tag],
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+        tags: List[Tag],
+        current_user: User = Depends(get_current_user),
+        recipes: List[Recipe] = Depends(get_all_recipes),
+        db: Session = Depends(get_db)
 ):
 
-    recipes = await RecipeRepository.get_all(db, current_user.id)
     filter_service = FilterService()
     return filter_service.filter_by_tag(recipes, tags)
