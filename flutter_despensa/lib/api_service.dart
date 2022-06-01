@@ -112,16 +112,16 @@ class ApiServices {
     var preferences = await SharedPreferences.getInstance();
     var api_root = await preferences.getString('api_root') as String;
 
-    var response = await http.post(
-        Uri.parse(api_root + '/recipe/filter/ingredient/'),
-        headers: <String, String>{
-          'Authorization': await preferences.getString('token') as String,
-        },
-        body: <String, String>{
-          'ingredients': jsonEncode(filter),
-        });
+    var response =
+        await http.post(Uri.parse(api_root + '/recipe/filter/ingredient/'),
+            headers: <String, String>{
+              'Authorization': await preferences.getString('token') as String,
+              'Content-Type': "application/json",
+            },
+            body: json.encode(filter));
 
-    print(jsonEncode(filter));
+    print("Body:");
+    print(json.encode(filter));
     print(response.body);
     var recipe_list = json.decode(response.body) as List;
     var recipes = recipe_list.map((r) => Recipe.fromJson(r)).toList();

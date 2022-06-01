@@ -20,7 +20,11 @@ class Recipe {
 
   Recipe.fromJson(Map<String, dynamic> json) {
     var ing_list = json['ingredients'] as List;
-    var tag_list = json['tags'] as List;
+
+    var tag_list = [];
+    if (json['tags'] != null) {
+      tag_list = json['tags'] as List;
+    }
 
     List<String> tagList =
         tag_list.map((i) => Tag.fromJson(i).toString()).toList();
@@ -102,6 +106,7 @@ class Ingredient {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
+    data['recipes'] = [];
     return data;
   }
 }
