@@ -175,9 +175,10 @@ async def register_recipe(recipe: Recipe, current_user: User = Depends(get_curre
 async def update_recipe(
         recipe: Recipe,
         recipe_id: int = Path(title="The ID of the item to update", ge=1),
-        current_user: User = Depends(get_current_user)
+        current_user: User = Depends(get_current_user),
+        db: Session = Depends(get_db)
 ):
-    return await RecipeRepository.update(recipe)
+    return await RecipeRepository.update(db, recipe_id, recipe)
 
 @app.get("/recipe/")
 async def get_all_recipes(
