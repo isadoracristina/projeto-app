@@ -16,9 +16,14 @@ class _NewRecipePageState extends State<NewRecipePage> {
   late TextEditingController inputrecipetime;
   late TextEditingController inputrecipepreparations;
   late TextEditingController inputrecipetag;
+  late TextEditingController inputreciperating;
   
   List<String> taglist = [];
   List<String> inglist = [];
+
+  addRecipe(name, time, tags, ingredients, preparation, classification){
+    
+  }
 
 
   @override
@@ -29,6 +34,7 @@ class _NewRecipePageState extends State<NewRecipePage> {
     inputrecipetime = TextEditingController();
     inputrecipepreparations = TextEditingController();
     inputrecipetag = TextEditingController();
+    inputreciperating = TextEditingController();
   }
 
   @override
@@ -227,7 +233,7 @@ class _NewRecipePageState extends State<NewRecipePage> {
                           content: TextField(
                             controller: inputrecipetag,
                             decoration: const InputDecoration(
-                              hintText: "2 colheres de sopa de farinha..."
+                              hintText: "2 ovos, 1 xícara de leite..."
                             ),
                           ),
                           actions: [
@@ -333,10 +339,33 @@ class _NewRecipePageState extends State<NewRecipePage> {
               onSaved: (value) {},
             ),
             const SizedBox(
+              height: 10,
+            ),
+            const Text(
+              "Classificação",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 105, 105, 105)),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            TextFormField(
+              controller: inputreciperating,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  hintText: "Digite a classificação da receita (0 - 5)"),
+              onSaved: (value) {},
+            ),
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  await addRecipe(inputrecipename, inputrecipetime, taglist, inglist, inputrecipepreparations, inputreciperating);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
