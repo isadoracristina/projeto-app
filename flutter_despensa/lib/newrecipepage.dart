@@ -11,23 +11,33 @@ class NewRecipePage extends StatefulWidget {
 }
 
 class _NewRecipePageState extends State<NewRecipePage> {
-
   late TextEditingController inputrecipename;
   late TextEditingController inputrecipetime;
   late TextEditingController inputrecipepreparations;
   late TextEditingController inputrecipetag;
   late TextEditingController inputreciperating;
-  
+
   List<String> taglist = [];
   List<String> inglist = [];
 
-  addRecipe(name, time, tags, ingredients, preparation, classification){
-    
+  var api_service = ApiServices();
+
+  addRecipe(name, time, tags, ingredients, preparation, classification) async {
+    var recipe = Recipe(
+      id: 0,
+      name: name,
+      time: time,
+      tags: tags,
+      ingredients: ingredients,
+      preparation: preparation,
+      classification: classification,
+      picture: '');
+
+    await api_service.registerRecipe(recipe);
   }
 
-
   @override
-  void initState (){
+  void initState() {
     super.initState();
 
     inputrecipename = TextEditingController();
@@ -38,30 +48,21 @@ class _NewRecipePageState extends State<NewRecipePage> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     inputrecipetag.dispose();
 
     super.dispose();
-
   }
 
-  void addIngredient(){
-    setState(() {
-      
-    });
+  void addIngredient() {
+    setState(() {});
   }
 
-  void addTag(){
-    setState(() {
-      
-    });
+  void addTag() {
+    setState(() {});
   }
-
-
-
 
   @override
-    
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -74,12 +75,8 @@ class _NewRecipePageState extends State<NewRecipePage> {
           IconButton(
             icon: const Icon(Icons.arrow_back_rounded),
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: ((context) => RecipeListPage())
-                )
-              );
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: ((context) => RecipeListPage())));
             },
           ),
           IconButton(
@@ -143,29 +140,28 @@ class _NewRecipePageState extends State<NewRecipePage> {
                 children: <Widget>[
                   ElevatedButton(
                     onPressed: () async {
-                      final tag = await  showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text("Inclua uma TAG",
-                            style: TextStyle(
-                              color: Colors.orangeAccent
-                            ),
-                          ),
-                          content: TextField(
-                            controller: inputrecipetag,
-                            decoration: const InputDecoration(
-                              hintText: "prática, café, rápida..."
-                            ),
-                          ),
-                          actions: [
-                            TextButton(
-                              autofocus: true,
-                              child: const Text("ADICIONAR"),
-                              onPressed: (){Navigator.of(context).pop(inputrecipetag.text);}
-                            )
-                          ],
-                        )
-                      );
+                      final tag = await showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: const Text(
+                                  "Inclua uma TAG",
+                                  style: TextStyle(color: Colors.orangeAccent),
+                                ),
+                                content: TextField(
+                                  controller: inputrecipetag,
+                                  decoration: const InputDecoration(
+                                      hintText: "prática, café, rápida..."),
+                                ),
+                                actions: [
+                                  TextButton(
+                                      autofocus: true,
+                                      child: const Text("ADICIONAR"),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(inputrecipetag.text);
+                                      })
+                                ],
+                              ));
                       setState(() {
                         taglist.add(tag);
                       });
@@ -179,38 +175,33 @@ class _NewRecipePageState extends State<NewRecipePage> {
                         WidgetSpan(
                           child: Icon(Icons.add, color: Colors.white, size: 15),
                         ),
-                        TextSpan(text: "TAG", style: TextStyle(color: Colors.white))
+                        TextSpan(
+                            text: "TAG", style: TextStyle(color: Colors.white))
                       ]),
                     ),
                   ),
                   ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    physics: const ClampingScrollPhysics(),
-                    itemCount: taglist.length,
-                    itemBuilder: (BuildContext context, int index){
-                      return Container(
-                        height: 35,
-                        alignment: Alignment.centerRight,
-                        margin: const EdgeInsets.all(3),
-                        padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                        decoration: BoxDecoration(
-                          color:const Color.fromARGB(255, 248,190,114),
-                          borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: Center(
-                          child: Text(taglist[index],
-                            style: const TextStyle(
-                              color: Colors.white
-                            )
-                            ),
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      itemCount: taglist.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          height: 35,
+                          alignment: Alignment.centerRight,
+                          margin: const EdgeInsets.all(3),
+                          padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                          decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 248, 190, 114),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Center(
+                            child: Text(taglist[index],
+                                style: const TextStyle(color: Colors.white)),
                           ),
-                      );
-                    } 
-                  ),
+                        );
+                      }),
                 ],
               ),
-
             ),
             const SizedBox(
               height: 10,
@@ -222,29 +213,28 @@ class _NewRecipePageState extends State<NewRecipePage> {
                 children: <Widget>[
                   ElevatedButton(
                     onPressed: () async {
-                      final ing = await  showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text("Inclua um Ingrediente",
-                            style: TextStyle(
-                              color: Colors.orangeAccent
-                            ),
-                          ),
-                          content: TextField(
-                            controller: inputrecipetag,
-                            decoration: const InputDecoration(
-                              hintText: "2 ovos, 1 xícara de leite..."
-                            ),
-                          ),
-                          actions: [
-                            TextButton(
-                              autofocus: true,
-                              child: const Text("ADICIONAR"),
-                              onPressed: (){Navigator.of(context).pop(inputrecipetag.text);}
-                            )
-                          ],
-                        )
-                      );
+                      final ing = await showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: const Text(
+                                  "Inclua um Ingrediente",
+                                  style: TextStyle(color: Colors.orangeAccent),
+                                ),
+                                content: TextField(
+                                  controller: inputrecipetag,
+                                  decoration: const InputDecoration(
+                                      hintText: "2 ovos, 1 xícara de leite..."),
+                                ),
+                                actions: [
+                                  TextButton(
+                                      autofocus: true,
+                                      child: const Text("ADICIONAR"),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(inputrecipetag.text);
+                                      })
+                                ],
+                              ));
                       setState(() {
                         inglist.add(ing);
                       });
@@ -258,39 +248,41 @@ class _NewRecipePageState extends State<NewRecipePage> {
                         WidgetSpan(
                           child: Icon(Icons.add, color: Colors.white, size: 15),
                         ),
-                        TextSpan(text: "Ingrediente", style: TextStyle(color: Colors.white))
+                        TextSpan(
+                            text: "Ingrediente",
+                            style: TextStyle(color: Colors.white))
                       ]),
                     ),
                   ),
                   ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    physics: const ClampingScrollPhysics(),
-                    itemCount: taglist.length,
-                    itemBuilder: (BuildContext context2, int index){
-                      if(inglist.isEmpty){return const SizedBox(height: 1, width: 1,);}
-                      else {return Container(
-                        height: 35,
-                        alignment: Alignment.centerRight,
-                        margin: const EdgeInsets.all(3),
-                        padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                        decoration: BoxDecoration(
-                          color:const Color.fromARGB(255, 248,190,114),
-                          borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: Center(
-                          child: Text(inglist[index],
-                            style: const TextStyle(
-                              color: Colors.white
-                            )
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      itemCount: taglist.length,
+                      itemBuilder: (BuildContext context2, int index) {
+                        if (inglist.isEmpty) {
+                          return const SizedBox(
+                            height: 1,
+                            width: 1,
+                          );
+                        } else {
+                          return Container(
+                            height: 35,
+                            alignment: Alignment.centerRight,
+                            margin: const EdgeInsets.all(3),
+                            padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                            decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 248, 190, 114),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Center(
+                              child: Text(inglist[index],
+                                  style: const TextStyle(color: Colors.white)),
                             ),
-                          ),
-                      );}
-                    } 
-                  ),
+                          );
+                        }
+                      }),
                 ],
               ),
-
             ),
             const SizedBox(
               height: 10,
@@ -365,13 +357,12 @@ class _NewRecipePageState extends State<NewRecipePage> {
             ),
             ElevatedButton(
                 onPressed: () async {
-                  await addRecipe(inputrecipename, inputrecipetime, taglist, inglist, inputrecipepreparations, inputreciperating);
+                  await addRecipe(inputrecipename.value.text, int.parse(inputrecipetime.value.text), taglist,
+                      inglist, inputrecipepreparations.value.text, double.parse(inputreciperating.value.text));
                   Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: ((context) => RecipeListPage())
-                    )
-                  );
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => RecipeListPage())));
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
@@ -386,8 +377,5 @@ class _NewRecipePageState extends State<NewRecipePage> {
         ),
       ),
     );
-
-
   }
 }
-

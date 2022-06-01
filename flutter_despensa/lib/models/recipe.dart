@@ -1,3 +1,5 @@
+import 'package:email_validator/email_validator.dart';
+
 class Recipe {
   late int id;
   late String name;
@@ -9,7 +11,7 @@ class Recipe {
   late double classification;
 
   Recipe(
-      {required this.id,
+    {required this.id,
       required this.name,
       required this.time,
       required this.picture,
@@ -41,25 +43,29 @@ class Recipe {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['id_user'] = 0;
     data['name'] = name;
-    data['time'] = time;
-    data['picture'] = picture;
-    data['tags'] = tags;
-    data['ingredients'] = ingredients;
-    data['preparation'] = preparation;
-    data['classification'] = classification;
+    data['img_addr'] = picture;
+    data['preparation_time_sec'] = time;
+    data['preparation_method'] = preparation;
+    data['observation'] = ' ';
+    data['pantry_only'] = false;
+    data['tags'] = [];
+    data['ingredients'] = [];
+    data['rating'] = classification;
     return data;
   }
 }
 
 class TagRel {
-  late int id;
+  late int id_tag;
+  late int id_recipe;
 
-  TagRel({required this.id});
+  TagRel({required this.id_tag, required this.id_recipe});
 
-  TagRel.fromJson(Map<String, dynamic> parsedJson) {
-    id:
-    parsedJson['id_tag'];
+  factory TagRel.fromJson(Map<String, dynamic> parsedJson) {
+    return TagRel(
+      id_tag: parsedJson['id_tag'], id_recipe: parsedJson['id_recipe']);
   }
 }
 
@@ -82,7 +88,7 @@ class IngredientRel {
   late String measurement;
 
   IngredientRel(
-      {required this.id_recipe,
+    {required this.id_recipe,
       required this.id_ingredient,
       required this.name,
       required this.amount,
@@ -91,11 +97,11 @@ class IngredientRel {
   factory IngredientRel.fromJson(Map<String, dynamic> parsedJson) {
     print(parsedJson);
     return IngredientRel(
-        id_recipe: parsedJson['id'],
-        id_ingredient: parsedJson['id_ingredient'],
-        name: parsedJson['name'],
-        amount: parsedJson['amount'],
-        measurement: parsedJson['measurement']);
+      id_recipe: parsedJson['id'],
+      id_ingredient: parsedJson['id_ingredient'],
+      name: parsedJson['name'],
+      amount: parsedJson['amount'],
+      measurement: parsedJson['measurement']);
   }
 }
 

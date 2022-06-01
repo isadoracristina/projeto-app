@@ -136,6 +136,7 @@ class ApiServices {
     var response = await http.post(Uri.parse(api_root + '/recipe/filter/tag'),
         headers: <String, String>{
           'Authorization': await preferences.getString('token') as String,
+          'Content-Type': "application/json",
         },
         body: <String, String>{
           'tag_list': jsonEncode(filter),
@@ -145,5 +146,19 @@ class ApiServices {
     var recipes = recipe_list.map((r) => Recipe.fromJson(r)).toList();
 
     return recipes;
+  }
+
+  registerRecipe(Recipe recipe) async {
+    var preferences = await SharedPreferences.getInstance();
+    var api_root = await preferences.getString('api_root') as String;
+
+    var response = await http.post(Uri.parse(api_root + '/recipe/'),
+        headers: <String, String>{
+          'Authorization': await preferences.getString('token') as String,
+          'Content-Type': "application/json",
+        },
+        body: jsonEncode(recipe));
+
+      print(response.body);
   }
 }
