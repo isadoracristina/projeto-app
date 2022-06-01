@@ -19,17 +19,14 @@ class Recipe {
       required this.classification});
 
   Recipe.fromJson(Map<String, dynamic> json) {
-    var ing_list = json['ingredients'] as List;
+    var ing_list = json['ingredients_names'] as List;
+    var tag_list = json['tags_names'] as List;
 
-    var tag_list = [];
-    if (json['tags'] != null) {
-      tag_list = json['tags'] as List;
-    }
-
-    List<String> tagList =
-        tag_list.map((i) => Tag.fromJson(i).toString()).toList();
-    List<String> ingredientList =
-        ing_list.map((i) => IngredientRel.fromJson(i).toString()).toList();
+    List<String> tagList = tag_list.map((i) => Tag.fromJson(i).name).toList();
+    List<String> ingredientList = ing_list.map((i) {
+        var ing = IngredientRel.fromJson(i);
+        return "${ing.amount} ${ing.measurement}  ${ing.name}";
+    }).toList();
 
     id = json['id'];
     name = json['name'];
@@ -55,24 +52,34 @@ class Recipe {
   }
 }
 
-class Tag {
+class TagRel {
   late int id;
 
-  Tag({required this.id});
+  TagRel({required this.id});
 
-  Tag.fromJson(Map<String, dynamic> parsedJson) {
-    print(parsedJson);
+  TagRel.fromJson(Map<String, dynamic> parsedJson) {
     id:
     parsedJson['id_tag'];
   }
 }
 
+class Tag {
+  late int id;
+  late String name;
+
+  Tag({required this.id, required this.name});
+
+  factory Tag.fromJson(Map<String, dynamic> parsedJson) {
+    return Tag(id: parsedJson['id_tag'], name: parsedJson['description_tag']);
+  }
+}
+
 class IngredientRel {
   late int id_recipe;
-  late int id_ingredient;
-  late double? amount;
-  late String? name;
-  late String? measurement;
+  late int? id_ingredient;
+  late double amount;
+  late String name;
+  late String measurement;
 
   IngredientRel(
       {required this.id_recipe,
@@ -81,9 +88,10 @@ class IngredientRel {
       required this.amount,
       required this.measurement});
 
-  IngredientRel.fromJson(Map<String, dynamic> parsedJson) {
-    IngredientRel(
-        id_recipe: parsedJson['id_recipe'],
+  factory IngredientRel.fromJson(Map<String, dynamic> parsedJson) {
+    print(parsedJson);
+    return IngredientRel(
+        id_recipe: parsedJson['id'],
         id_ingredient: parsedJson['id_ingredient'],
         name: parsedJson['name'],
         amount: parsedJson['amount'],
