@@ -3,14 +3,24 @@ import 'package:flutter_despensa/models/recipe.dart';
 import 'package:flutter_despensa/recipelistpage.dart';
 import 'models/recipe.dart';
 
-class RecipePage extends StatelessWidget {
+class RecipePage extends StatefulWidget {
 
+  Recipe recipe;
 
-  var recipe = Recipe(id: 1, name: "Waffle", time: 20, picture: "abc", tags: ["café", "pratica"], ingredients: ["farinha", "ovos"], preparation: "Misture tudo", classification: 4);
+  RecipePage(this.recipe);
+
 
 
   @override
+  State<RecipePage> createState() => _RecipePageState();
+}
+
+class _RecipePageState extends State<RecipePage> {
+  //var recipe = Recipe(id: 1, name: "Waffle", time: 20, picture: "abc", tags: ["café", "pratica"], ingredients: ["farinha", "ovos"], preparation: "Misture tudo", classification: 4);
+
+  @override
   Widget build(BuildContext context) {
+    //print(widget.recipe.name);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 241, 147, 58),
@@ -45,7 +55,7 @@ class RecipePage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget> [
-                Text(recipe.name,
+                Text(widget.recipe.name,
                   style: const TextStyle(
                     fontSize: 35,
                     fontWeight: FontWeight.bold,
@@ -62,7 +72,7 @@ class RecipePage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10)
                   ),
                   child: Center(
-                    child: Text(recipe.time.toString() + " min",
+                    child: Text(widget.recipe.time.toString() + " min",
                       style: const TextStyle(
                         color: Colors.white,
                       ),
@@ -88,12 +98,12 @@ class RecipePage extends StatelessWidget {
               height: 10,
             ),
             SizedBox(
-              height: 30,
+              height: 40,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
                 physics: const ClampingScrollPhysics(),
-                itemCount: recipe.tags.length,
+                itemCount: widget.recipe.tags.length,
                 separatorBuilder: (BuildContext ctxt, int index) => const Divider(thickness: 50, color: Colors.transparent,),
                 itemBuilder: (BuildContext ctxt, int index) {
                   return Container(
@@ -105,7 +115,7 @@ class RecipePage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10)
                     ),
                     child: Center(
-                      child: Text(recipe.tags[index],
+                      child: Text(widget.recipe.tags[index],
                         style: const TextStyle(
                           color: Colors.white,
                         ),
@@ -141,9 +151,9 @@ class RecipePage extends StatelessWidget {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: const ClampingScrollPhysics(),
-                itemCount: recipe.ingredients.length,
+                itemCount: widget.recipe.ingredients.length,
                 itemBuilder: (BuildContext ctxt, int index) {
-                  return Text(recipe.ingredients[index],
+                  return Text(widget.recipe.ingredients[index],
                   );
                 },
               ),
@@ -171,7 +181,7 @@ class RecipePage extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(10)
               ),
-              child: Text(recipe.preparation)
+              child: Text(widget.recipe.preparation)
             ),
             const SizedBox(
               height: 20,
@@ -191,7 +201,7 @@ class RecipePage extends StatelessWidget {
                         size: 15),
                     ),
                     TextSpan(
-                      text: " " + recipe.classification.toString(),
+                      text: " " + widget.recipe.classification.toString(),
                         style: const TextStyle(
                           color: Colors.white
                         )

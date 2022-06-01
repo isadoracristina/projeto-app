@@ -22,8 +22,6 @@ class Recipe {
     var ing_list = json['ingredients'] as List;
     var tag_list = json['tags'] as List;
 
-    print(tag_list);
-    print(ing_list);
     List<String> tagList =
         tag_list.map((i) => Tag.fromJson(i).toString()).toList();
     List<String> ingredientList = ing_list.map((i) => Ingredient.fromJson(i).toString()).toList();
@@ -58,6 +56,7 @@ class Tag {
   Tag({required this.id});
 
   Tag.fromJson(Map<String, dynamic> parsedJson) {
+    print(parsedJson);
     id:
     parsedJson['id_tag'];
   }

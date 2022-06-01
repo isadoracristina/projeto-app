@@ -113,7 +113,7 @@ Future<List<Recipe>> getRecipes() async {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: ((context) =>
-                                                        RecipePage())));
+                                                        RecipePage(snapshot.data![index]))));
                                           },
                                           child:
                                               Text(snapshot.data![index].name),
@@ -135,9 +135,7 @@ Future<List<Recipe>> getRecipes() async {
                                                   borderRadius: BorderRadius.circular(10)
                                                 ),
                                                 child: Center(
-                                                  child: Text(
-                                                    snapshot.data![index]
-                                                      .tags[index2],
+                                                  child: Text(snapshot.data![index].tags[index2],
                                                     style: const TextStyle(
                                                     color: Colors.white,
                                                     )
