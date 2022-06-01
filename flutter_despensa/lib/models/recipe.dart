@@ -6,7 +6,7 @@ class Recipe {
   late List<String> tags;
   late List<String> ingredients;
   late String preparation;
-  late int classification;
+  late double classification;
 
   Recipe(
       {required this.id,
@@ -30,7 +30,7 @@ class Recipe {
 
     id = json['id'];
     name = json['name'];
-    time = json['preparation_time_sec'] / 60;
+    time = json['preparation_time_sec'] ~/ 60;
     //picture = json['picture'];
     tags = tagList;
     ingredients = ingredientList;
@@ -65,7 +65,7 @@ class Tag {
 
 class Ingredient {
   late int id;
-  late int amount;
+  late double amount;
   late String measurement;
 
   Ingredient(
