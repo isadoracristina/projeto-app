@@ -309,7 +309,7 @@ async def register_tag(
 
     return await TagRepository.create(db, tag)
 
-@app.get("/recipe/filter/ingredient/")
+@app.post("/recipe/filter/ingredient/")
 async def get_filtered_recipes(
     ingredients: List[Ingredient],
     current_user: User = Depends(get_current_user),
@@ -320,7 +320,7 @@ async def get_filtered_recipes(
     filter_service = FilterService()
     return filter_service.filter_by_ingredient(recipes, ingredients)
 
-@app.get("/recipe/filter/tag/")
+@app.post("/recipe/filter/tag/")
 async def get_filtered_recipes(
     tags: List[Tag],
     current_user: User = Depends(get_current_user),

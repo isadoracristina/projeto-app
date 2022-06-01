@@ -24,7 +24,8 @@ class Recipe {
 
     List<String> tagList =
         tag_list.map((i) => Tag.fromJson(i).toString()).toList();
-    List<String> ingredientList = ing_list.map((i) => Ingredient.fromJson(i).toString()).toList();
+    List<String> ingredientList =
+        ing_list.map((i) => IngredientRel.fromJson(i).toString()).toList();
 
     id = json['id'];
     name = json['name'];
@@ -62,18 +63,45 @@ class Tag {
   }
 }
 
-class Ingredient {
-  late int id;
-  late double amount;
-  late String measurement;
+class IngredientRel {
+  late int id_recipe;
+  late int id_ingredient;
+  late double? amount;
+  late String? name;
+  late String? measurement;
 
-  Ingredient(
-      {required this.id, required this.amount, required this.measurement});
+  IngredientRel(
+      {required this.id_recipe,
+      required this.id_ingredient,
+      required this.name,
+      required this.amount,
+      required this.measurement});
 
-  Ingredient.fromJson(Map<String, dynamic> parsedJson) {
-    Ingredient(
-        id: parsedJson['id_ingredient'],
+  IngredientRel.fromJson(Map<String, dynamic> parsedJson) {
+    IngredientRel(
+        id_recipe: parsedJson['id_recipe'],
+        id_ingredient: parsedJson['id_ingredient'],
+        name: parsedJson['name'],
         amount: parsedJson['amount'],
         measurement: parsedJson['measurement']);
+  }
+}
+
+class Ingredient {
+  late int id;
+  late String name;
+
+  Ingredient({required this.id, required this.name});
+
+  Ingredient.fromJson(Map<String, dynamic> parsedJson) {
+    id = parsedJson['id_ingredient'];
+    name = parsedJson['name_ingredient'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    return data;
   }
 }
