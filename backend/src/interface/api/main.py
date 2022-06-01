@@ -22,6 +22,8 @@ from backend.src.domain.entities.tag import Tag
 
 from backend.src.interface.database.user_model import UserModel
 
+from backend.src.domain.services.filter_service import FilterService
+
 app = FastAPI()
 Base.metadata.create_all(bind=engine)
 
@@ -259,3 +261,24 @@ async def register_tag(
 
     return await TagRepository.create(db, tag)
 
+@app.get("/recipe/filter/ingredient/")
+async def get_filtered_recipes(
+    ingredients: List[Ingredient],
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+
+    recipes = await RecipeRepository.get_all(db, current_user.id)
+    filter_service = FilterService()
+    return filter_service.filter_by_ingredient(recipes, ingredients)
+
+@app.get("/recipe/filter/tag/")
+async def get_filtered_recipes(
+    tags: List[Tag],
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+
+    recipes = await RecipeRepository.get_all(db, current_user.id)
+    filter_service = FilterService()
+    return filter_service.filter_by_tag(recipes, tags)
