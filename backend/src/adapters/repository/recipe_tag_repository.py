@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+import sqlalchemy
 
 from backend.src.domain.ports.recipe_tag_repository import Recipe_TagRepository
 
@@ -15,3 +16,8 @@ class Recipe_TagRepositoryImpl(Recipe_TagRepository):
         db.commit()
         db.refresh(db_item)
         return db_item
+    
+    async def delete_all_by_recipe(self, db: Session, recipeid: int) -> Recipe_Tag:
+        db.query(models.Recipe_Tag).filter(models.Recipe_Tag.id_recipe==recipeid).delete()
+        
+        db.commit()

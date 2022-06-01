@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import func
-import datetime
+import sqlalchemy
 
 from backend.src.domain.ports.recipe_ingredient_repository import Recipe_IngredientRepository
 
@@ -19,3 +19,8 @@ class Recipe_IngredientRepositoryImpl(Recipe_IngredientRepository):
         db.commit()
         db.refresh(db_item)
         return db_item
+    
+    async def delete_all_by_recipe(self, db: Session, recipeid: int) -> Recipe_Ingredient:
+        db.query(models.Recipe_Ingredient).filter(models.Recipe_Ingredient.id_recipe==recipeid).delete()
+        
+        db.commit()

@@ -1,4 +1,5 @@
 from unicodedata import name
+import sqlalchemy
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import func
 from typing import List
@@ -46,18 +47,23 @@ class RecipeRepositoryImpl(RecipeRepository):
 
         return db_item
 
-    async def update(self, db: Session, recipe: Recipe) -> models.Recipe:
-        if recipe.id not in FakeDB_Recipes:
-            return NotImplementedError
+    async def update(self, db: Session, recipeid: int, recipe: Recipe) -> models.Recipe:
+        db.execute(sqlalchemy.update(models.Recipe).
+                              where(models.Recipe.id_recipe == recipeid).
+                              values(name_recipe=recipe.name, img_addr=recipe.img_addr,
+                                     prep_time=recipe.preparation_time_sec, prep_method= recipe.preparation_method,
+                                     rating=recipe.rating, observation=recipe.observation,
+                                     pantry_only=recipe.pantry_only))
+        
+        db.commit()
 
-        elif recipe.id == 0:
-            return NotImplementedError
+        await ingred_repo.delete_all_by_recipe(db, recipeid)
+        await tag_repo.delete_all_by_recipe(db, recipeid)
 
-        ingredients = [x.name for x in recipe.ingredients]
-        FakeDB_Recipes[recipe.id] = vars(recipe)
-        FakeDB_Recipes[recipe.id]["ingredients"] = ingredients
-        del FakeDB_Recipes[recipe.id]["id"]
-        return recipe
+        for r in recipe.ingredients:
+            await ingred_repo.create(db, recipeid, r)
+        for r in recipe.tags:
+            await tag_repo.create(db, recipeid, r)
 
     async def get_all(self, db: Session, user_id: int) -> List[Recipe]:
         return db.query(models.Recipe).filter(models.Recipe.id_user == user_id).all()
