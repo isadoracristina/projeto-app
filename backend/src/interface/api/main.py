@@ -13,10 +13,12 @@ from backend.src.interface.database.models import Base
 from backend.src.adapters.repository.recipe_repository import RecipeRepositoryImpl
 from backend.src.adapters.repository.user_repository import UserRepositoryImpl
 from backend.src.adapters.repository.ingredient_repository import IngredientRepositoryImpl
+from backend.src.adapters.repository.tag_repository import TagRepositoryImpl
 
 from backend.src.domain.entities.user import User
 from backend.src.domain.entities.recipe import Recipe
 from backend.src.domain.entities.ingredient import Ingredient
+from backend.src.domain.entities.tag import Tag
 
 from backend.src.interface.database.user_model import UserModel
 
@@ -39,6 +41,7 @@ app.add_middleware(
 UserRepository = UserRepositoryImpl()
 RecipeRepository = RecipeRepositoryImpl()
 IngredientRepository = IngredientRepositoryImpl()
+TagRepository = TagRepositoryImpl()
 
 SECRET_KEY = "feb5eb835a3fff5567272d7ddfd93c0c28c7151a38c04fc6d5d65aece6a10f66"
 ALGORITHM = "HS256"
@@ -222,3 +225,37 @@ async def get_all_ingredients(
 ):
 
     return await IngredientRepository.get_all(db) 
+
+@app.get("/tag/{tag_id}")
+async def get_tag(
+    tag_id: int = Path(title="The ID of the item to get", ge=1),
+    currrent_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+
+    return await TagRepository.get(db, tag_id=tag_id)
+
+@app.post("/tag/")
+async def register_tag(
+    tag: Tag,
+    db: Session = Depends(get_db)
+):
+    
+    return await TagRepository.create(db, tag)
+
+@app.get("/tag/")
+async def get_all_tags(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+
+    return await TagRepository.get_all(db) 
+
+@app.post("/tag/")
+async def register_tag(
+    tag: Tag,
+    db: Session = Depends(get_db)
+):
+
+    return await TagRepository.create(db, tag)
+
