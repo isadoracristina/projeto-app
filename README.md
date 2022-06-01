@@ -88,3 +88,39 @@ Tarefas:
 #### Mockup
 [Figma](https://www.figma.com/file/HDPIFBw5r1DBj6gyUNw6mN/Despensa?node-id=565%3A22170)  
 Para interagir, clique no botão "Play", acima e à direita.
+
+
+### Sprint 2 - Arquitetura
+
+[Link Com Imagens](https://docs.google.com/document/d/e/2PACX-1vTCOhkre6hB3UxyQsAPiNMFKLU76b92liHyofrFvRfFdi15llzJYPcfkRGxLucKMascattOweQ-rpYG/pub)  
+
+#### Domain Driven Design
+
+Procuramos utilizar termos ubíquos para nomear nossas entidades. Por se tratar de um sistema que utiliza conceitos do dia-dia, essa tarefa foi bastante simples.
+A figura abaixo mostra nossas Entidades e Objetos de Valor.
+
+Inicialmente temos a entidade Usuário. Cada Usuário tem os objetos de valor Nome, Sobrenome, Email e Senha. O Usuário também possui como atributo uma lista de Receita, que é outra entidade.
+Receita possui como objetos de valor: Nome, Tempo, Preparo, Classificação e Imagem. Além disso, também possui uma lista de TAG (que é uma entidade com Nome) e uma lista de Ingrediente (que é uma entidade com Nome e Medida).
+
+As classes de serviço são utilizadas para adicionar e remover Receitas dos Usuários, filtrá-las em sua exibição e registrar Usuário e fazer o login. Ou seja, são aquelas implementadas no backEnd que executam a lógica principal do programa. Na figura abaixo temos um exemplo da função que Filtra as receitas.
+
+O Usuário com seus objetos de valor e a Receita, formam um agregado, afinal, toda receita está associada a um Usuário. Entretanto, Receita pode funcionar como um agregado por si só, com seus objetos de valor e listas de TAG e Ingrediente em futuras atualizações do aplicativo (por exemplo, uma receita pode ser compartilhada em um ambiente para qualquer Usuário).
+
+Usamos o BD SQLite e associamos a cada Entidade um ID (Receita possui o ID do Usuário e TAG e Ingrediente possuem o ID da Receita). O Repositório são as funções que ligam os Serviços fornecidos para as Entidades ao BD, logo, temos arquivos de repositório para cada Entidade, como mostrado no repositório do Usuário na figura abaixo.
+
+### Arquitetura Hexagonal
+
+Na arquitetura hexagonal, assim como em DDD, tentamos separar o máximo possível o Domínio do Sistema de suas tecnologias. As principais tecnologias (camada externa do modelo hexagonal) utilizadas no desenvolvimento do nosso sistema foram Flutter, FastAPI e SQLite. Enquanto isso, a camada interna com adaptadores, portas e classes de domínio, utilizou a linguagem Python3.
+
+A adoção desse tipo de arquitetura é vantajosa para o sistema que está sendo implementado. A separação bem delineada entre domínio e tecnologias faz com que os códigos implementados (tanto backEnd, frontEnd e Banco de Dados) tenham maior independência. A alteração do código de alguma dessas partes, dificilmente vai levar à “quebra” do sistema por completo. Além disso, essa arquitetura deixou nosso sistema mais simples de ser entendido e mais fácil de ter o código do backEnd testado.
+
+Sobre as tecnologias, o Flutter é a API do FrontEnd, que utiliza a linguagem Dart e é especializada na construção de aplicativos mobile. A FastAPI. O SQLite é utilizado como Banco de Dados e o SQLAlchemy é uma biblioteca em Python que facilita a manutenção dos dados em SQLite.
+
+As funções com Adaptadores são a implementação das interfaces, ou seja, ela implementa a comunicação entre portas e tecnologias. Um exemplo é a implementação do repositório do Usuário. A porta de saída para a comunicaćão do usuário com o Banco de Dados faz a requisićão para esse adaptador e ele, por sua vez, comunica com o BD, como mostrado no código abaixo.
+
+Como Portas de Entrada temos a conexão, intermediada pelos adaptadores entre os requisitos solicitados pelas tecnologias (FrontEnd e FastAPI). Fazemos isso por meio de APIs implementadas no BackEnd. Na figura abaixo, podemos ver o começo da função main.py que faz a chamada para estabelecer a conexão com a FastAPI.
+
+As Classes do Domínio estabelecem as principais aplicações do sistema juntamente com a definição das Entidades (de acordo com DDD). A figura abaixo mostra a definição do Usuário no backEnd.
+
+Finalmente, as Portas de Saída fazem a comunicação com os adaptadores do Banco de Dados. Logo, aqui temos os já mencionados arquivos de repositório. Cada Entidade, ou nesse caso, Objetos da Classe do Domínio, possui uma porta relativa.
+
