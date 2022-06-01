@@ -63,6 +63,12 @@ class UserRegister(BaseModel):
     email: str
     password: str
 
+class IngredientNameMeasure(BaseModel):
+    id: int
+    name: str
+    amount: float
+    measurement: str
+
 class RecipeGet(BaseModel):
     id: int
     id_user: int
@@ -185,8 +191,9 @@ async def get_recipe(
     list_tag_names = []
     for r in recipe_model.ingredients:
         i = await IngredientRepository.get(db, r.id_ingredient)
-        print(i.id_ingredient, i.name_ingredient)
-        list_ing_names.append(i)
+        i_name = IngredientNameMeasure(id=i.id_ingredient, name=i.name_ingredient,
+                                       amount=r.amount, measurement=r.measurement)
+        list_ing_names.append(i_name)
     for r in recipe_model.tags:
         t = await TagRepository.get(db, r.id_tag)
         list_tag_names.append(t)
@@ -226,7 +233,9 @@ async def get_all_recipes(
         list_tag_names = []
         for r in recipe_model.ingredients:
             i = await IngredientRepository.get(db, r.id_ingredient)
-            list_ing_names.append(i)
+            i_name = IngredientNameMeasure(id=i.id_ingredient, name=i.name_ingredient,
+                                           amount=r.amount, measurement=r.measurement)
+            list_ing_names.append(i_name)
         for r in recipe_model.tags:
             t = await TagRepository.get(db, r.id_tag)
             list_tag_names.append(t)
