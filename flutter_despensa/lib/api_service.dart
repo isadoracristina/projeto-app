@@ -60,7 +60,7 @@ class ApiServices {
         });
 
     // Tratar caso resposta não seja OK
-    return json.decode(response.body);
+    return json.decode(utf8.decode(response.bodyBytes));
   }
 
   getUser() async {
@@ -72,7 +72,7 @@ class ApiServices {
       'Authorization': await preferences.getString('token') as String,
     });
 
-    return json.decode(response.body);
+    return json.decode(utf8.decode(response.bodyBytes));
   }
 
   Future<List<Recipe>> getAllRecipes() async {
@@ -84,7 +84,7 @@ class ApiServices {
       'Authorization': await preferences.getString('token') as String,
     });
 
-    var recipe_list = json.decode(response.body) as List;
+    var recipe_list = json.decode(utf8.decode(response.bodyBytes)) as List;
     var recipes = recipe_list.map((r) => Recipe.fromJson(r)).toList();
 
     return recipes;
@@ -99,7 +99,7 @@ class ApiServices {
       'Authorization': await preferences.getString('token') as String,
     });
 
-    var ingredient_list = json.decode(response.body) as List;
+    var ingredient_list = json.decode(utf8.decode(response.bodyBytes)) as List;
 
     var ingredients =
         ingredient_list.map((r) => Ingredient.fromJson(r)).toList();
@@ -120,10 +120,7 @@ class ApiServices {
             },
             body: json.encode(filter));
 
-    print("Body:");
-    print(json.encode(filter));
-    print(response.body);
-    var recipe_list = json.decode(response.body) as List;
+    var recipe_list = json.decode(utf8.decode(response.bodyBytes)) as List;
     var recipes = recipe_list.map((r) => Recipe.fromJson(r)).toList();
 
     return recipes;
@@ -142,7 +139,7 @@ class ApiServices {
           'tag_list': jsonEncode(filter),
         });
 
-    var recipe_list = json.decode(response.body) as List;
+    var recipe_list = json.decode(utf8.decode(response.bodyBytes)) as List;
     var recipes = recipe_list.map((r) => Recipe.fromJson(r)).toList();
 
     return recipes;
