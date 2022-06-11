@@ -19,8 +19,8 @@ class Recipe_IngredientRepositoryImpl(Recipe_IngredientRepository):
         db.commit()
         db.refresh(db_item)
         return db_item
-    
-    async def delete_all_by_recipe(self, db: Session, recipeid: int) -> Recipe_Ingredient:
+
+    async def delete_all_by_recipe(self, db: Session, recipeid: int):
         db.query(models.Recipe_Ingredient).filter(models.Recipe_Ingredient.id_recipe==recipeid).delete()
-        
+
         db.commit()
