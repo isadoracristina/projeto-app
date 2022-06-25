@@ -25,7 +25,7 @@ class RecipeRepositoryImpl(RecipeRepository):
     async def get(self, db: Session, id: int) -> models.Recipe:
         return db.query(models.Recipe).filter(models.Recipe.id_recipe == id).first()
 
-    async def create(self, db: Session, recipe: Recipe, user: User) -> models.Recipe:
+    async def create(self, db: Session, recipe: Recipe, user: models.User) -> models.Recipe:
         new_id = SessionLocal().query(func.max(models.Recipe.id_recipe)).scalar()
         if new_id == None:
             new_id = 1
@@ -40,14 +40,14 @@ class RecipeRepositoryImpl(RecipeRepository):
         db.commit()
         db.refresh(db_item)
         
-        for r in recipe.ingredients:
-            await ingred_repo.create(db, new_id, r)
-        for r in recipe.tags:
-            await tag_repo.create(db, new_id, r)
+        for i in recipe.ingredients:
+            await ingred_repo.create(db, new_id, i)
+        for t in recipe.tags:
+            await tag_repo.create(db, new_id, t)
 
         return db_item
 
-    async def update(self, db: Session, recipeid: int, recipe: Recipe) -> models.Recipe:
+    async def update(self, db: Session, recipeid: int, recipe: Recipe) -> None:
         db.execute(sqlalchemy.update(models.Recipe).
                               where(models.Recipe.id_recipe == recipeid).
                               values(name_recipe=recipe.name, img_addr=recipe.img_addr,
@@ -60,10 +60,10 @@ class RecipeRepositoryImpl(RecipeRepository):
         await ingred_repo.delete_all_by_recipe(db, recipeid)
         await tag_repo.delete_all_by_recipe(db, recipeid)
 
-        for r in recipe.ingredients:
-            await ingred_repo.create(db, recipeid, r)
-        for r in recipe.tags:
-            await tag_repo.create(db, recipeid, r)
+        for i in recipe.ingredients:
+            await ingred_repo.create(db, recipeid, i)
+        for t in recipe.tags:
+            await tag_repo.create(db, recipeid, t)
 
-    async def get_all(self, db: Session, user_id: int) -> List[Recipe]:
+    async def get_all(self, db: Session, user_id: int) -> List[models.Recipe]:
         return db.query(models.Recipe).filter(models.Recipe.id_user == user_id).all()
