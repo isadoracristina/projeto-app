@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from backend.src.interface.database.database import SessionLocal, engine
 from backend.src.interface.database.models import Base
+import backend.src.interface.database.models as models
 from backend.src.adapters.repository.recipe_repository import RecipeRepositoryImpl
 from backend.src.adapters.repository.user_repository import UserRepositoryImpl
 from backend.src.adapters.repository.ingredient_repository import IngredientRepositoryImpl
@@ -142,7 +143,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
     except JWTError:
         raise credentials_exception
 
-    user = await UserRepository.get_by_name(db,name=token_data.username)
+    user = await UserRepository.get_by_name(db,name=str(token_data.username))
     if user is None:
         raise credentials_exception
 
@@ -209,7 +210,7 @@ async def get_recipe(
     return recipe
 
 @app.post("/recipe/")
-async def register_recipe(recipe: Recipe, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+async def register_recipe(recipe: Recipe, current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
     return await RecipeRepository.create(db, recipe, current_user)
 
 @app.put("/recipe/{recipe_id}")
@@ -223,7 +224,7 @@ async def update_recipe(
 
 @app.get("/recipe/")
 async def get_all_recipes(
-        current_user: User = Depends(get_current_user),
+        current_user: models.User = Depends(get_current_user),
         db: Session = Depends(get_db)
 ):
 
@@ -258,7 +259,7 @@ async def get_ingredient(
     db: Session = Depends(get_db)
 ):
 
-    return await IngredientRepository.get(db, ingredient_id=ingredient_id)
+    return await IngredientRepository.get(db, ingredient_id)
 
 @app.post("/ingredient/")
 async def register_ingredient(
@@ -283,7 +284,7 @@ async def get_tag(
     db: Session = Depends(get_db)
 ):
 
-    return await TagRepository.get(db, tag_id=tag_id)
+    return await TagRepository.get(db, tag_id)
 
 @app.post("/tag/")
 async def register_tag(
@@ -301,16 +302,8 @@ async def get_all_tags(
 
     return await TagRepository.get_all(db) 
 
-@app.post("/tag/")
-async def register_tag(
-    tag: Tag,
-    db: Session = Depends(get_db)
-):
-
-    return await TagRepository.create(db, tag)
-
 @app.post("/recipe/filter/ingredient/")
-async def get_filtered_recipes(
+async def get_filtered_recipes_by_ingredient(
         ingredients: List[Ingredient],
         current_user: User = Depends(get_current_user),
         recipes: List[Recipe] = Depends(get_all_recipes),
@@ -321,7 +314,7 @@ async def get_filtered_recipes(
     return filter_service.filter_by_ingredient(recipes, ingredients)
 
 @app.post("/recipe/filter/tag/")
-async def get_filtered_recipes(
+async def get_filtered_recipes_by_tag(
         tags: List[Tag],
         current_user: User = Depends(get_current_user),
         recipes: List[Recipe] = Depends(get_all_recipes),
