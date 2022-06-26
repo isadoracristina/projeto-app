@@ -8,6 +8,9 @@ from pydantic.main import BaseModel
 from sqlalchemy.orm import Session
 
 from datetime import datetime, timedelta
+
+from sqlalchemy.sql.functions import current_user
+from backend.src.domain.services.ingredient_service import IngredientService
 from backend.src.interface.database.database import SessionLocal, engine
 from backend.src.interface.database.models import Base
 import backend.src.interface.database.models as models
@@ -25,6 +28,9 @@ from backend.src.domain.entities.tag import Tag
 
 from backend.src.interface.database.user_model import UserModel
 
+from backend.src.domain.services.ingredient_service import IngredientService
+from backend.src.domain.services.tag_service import TagService
+from backend.src.domain.services.recipe_service import RecipeService
 from backend.src.domain.services.filter_service import FilterService
 
 app = FastAPI()
@@ -44,9 +50,10 @@ app.add_middleware(
 
 
 UserRepository = UserRepositoryImpl()
-RecipeRepository = RecipeRepositoryImpl()
-IngredientRepository = IngredientRepositoryImpl()
-TagRepository = TagRepositoryImpl()
+
+RecipeService = RecipeService()
+TagService = TagService()
+IngredientService = IngredientService()
 
 SECRET_KEY = "feb5eb835a3fff5567272d7ddfd93c0c28c7151a38c04fc6d5d65aece6a10f66"
 ALGORITHM = "HS256"
@@ -186,32 +193,11 @@ async def get_recipe(
         current_user: User = Depends(get_current_user),
         db: Session = Depends(get_db)
 ):
-    recipe_model = await RecipeRepository.get(db, recipe_id)
-    
-    list_ing_names = []
-    list_tag_names = []
-    for r in recipe_model.ingredients:
-        i = await IngredientRepository.get(db, r.id_ingredient)
-        i_name = IngredientNameMeasure(id=i.id_ingredient, name=i.name_ingredient,
-                                       amount=r.amount, measurement=r.measurement)
-        list_ing_names.append(i_name)
-    for r in recipe_model.tags:
-        t = await TagRepository.get(db, r.id_tag)
-        list_tag_names.append(t)
-
-    recipe = RecipeGet(id=recipe_model.id_recipe, id_user=recipe_model.id_user,
-                    name=recipe_model.name_recipe, img_addr=recipe_model.img_addr,
-                    preparation_time_sec=recipe_model.prep_time, preparation_method= recipe_model.prep_method,
-                    rating=recipe_model.rating, observation=recipe_model.observation,
-                    last_made=recipe_model.last_made, pantry_only=recipe_model.pantry_only,
-                    ingredients=recipe_model.ingredients, tags=recipe_model.tags,
-                    ingredients_names= list_ing_names, tags_names=list_tag_names)
-
-    return recipe
+    return await RecipeService.get_recipe(recipe_id, current_user, db)
 
 @app.post("/recipe/")
-async def register_recipe(recipe: Recipe, current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
-    return await RecipeRepository.create(db, recipe, current_user)
+async def register_recipe(recipe: Recipe, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return await RecipeService.register_recipe(recipe, current_user, db)
 
 @app.put("/recipe/{recipe_id}")
 async def update_recipe(
@@ -220,7 +206,7 @@ async def update_recipe(
         current_user: User = Depends(get_current_user),
         db: Session = Depends(get_db)
 ):
-    return await RecipeRepository.update(db, recipe_id, recipe)
+    return await RecipeService.update_recipe(recipe, recipe_id, current_user,  db)
 
 @app.get("/recipe/")
 async def get_all_recipes(
@@ -228,29 +214,7 @@ async def get_all_recipes(
         db: Session = Depends(get_db)
 ):
 
-    list_recipes = []
-    for recipe_model in await RecipeRepository.get_all(db, user_id=current_user.id_user):
-        list_ing_names = []
-        list_tag_names = []
-        for r in recipe_model.ingredients:
-            i = await IngredientRepository.get(db, r.id_ingredient)
-            i_name = IngredientNameMeasure(id=i.id_ingredient, name=i.name_ingredient,
-                                           amount=r.amount, measurement=r.measurement)
-            list_ing_names.append(i_name)
-        for r in recipe_model.tags:
-            t = await TagRepository.get(db, r.id_tag)
-            list_tag_names.append(t)
-
-        recipe = RecipeGet(id=recipe_model.id_recipe, id_user=recipe_model.id_user,
-                    name=recipe_model.name_recipe, img_addr=recipe_model.img_addr,
-                    preparation_time_sec=recipe_model.prep_time, preparation_method= recipe_model.prep_method,
-                    rating=recipe_model.rating, observation=recipe_model.observation,
-                    last_made=recipe_model.last_made, pantry_only=recipe_model.pantry_only,
-                    ingredients=recipe_model.ingredients, tags=recipe_model.tags,
-                    ingredients_names= list_ing_names, tags_names=list_tag_names)
-        list_recipes.append(recipe)
-
-    return list_recipes
+    return await RecipeService.get_all_recipes(current_user, db)
 
 @app.get("/ingredient/{ingredient_id}")
 async def get_ingredient(
@@ -259,15 +223,16 @@ async def get_ingredient(
     db: Session = Depends(get_db)
 ):
 
-    return await IngredientRepository.get(db, ingredient_id)
+    return await IngredientService.get_ingredient(ingredient_id, db)
+
 
 @app.post("/ingredient/")
 async def register_ingredient(
     ingredient: Ingredient,
     db: Session = Depends(get_db)
 ):
-    
-    return await IngredientRepository.create(db, ingredient)
+
+    return await IngredientService.register_ingredient(db, ingredient)
 
 @app.get("/ingredient/")
 async def get_all_ingredients(
@@ -275,24 +240,24 @@ async def get_all_ingredients(
     db: Session = Depends(get_db)
 ):
 
-    return await IngredientRepository.get_all(db) 
+    return await IngredientService.get_all_ingredients(db)
 
 @app.get("/tag/{tag_id}")
 async def get_tag(
     tag_id: int = Path(title="The ID of the item to get", ge=1),
     currrent_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
-):
+) -> Tag:
 
-    return await TagRepository.get(db, tag_id)
+    return await TagService.get_tag(tag_id, current_user, db)
 
 @app.post("/tag/")
 async def register_tag(
     tag: Tag,
     db: Session = Depends(get_db)
-):
-    
-    return await TagRepository.create(db, tag)
+) -> Tag:
+
+    return await TagService.register_tag(tag, db)
 
 @app.get("/tag/")
 async def get_all_tags(
@@ -300,7 +265,7 @@ async def get_all_tags(
     db: Session = Depends(get_db)
 ):
 
-    return await TagRepository.get_all(db) 
+    return await TagService.get_all_tags(current_user, db)
 
 @app.post("/recipe/filter/ingredient/")
 async def get_filtered_recipes_by_ingredient(
@@ -323,3 +288,5 @@ async def get_filtered_recipes_by_tag(
 
     filter_service = FilterService()
     return filter_service.filter_by_tag(recipes, tags)
+
+
