@@ -73,7 +73,7 @@ class RecipeService():
 
     async def get_all_recipes(self, user: User, db) -> List[Recipe]:
         list_recipes = []
-        for recipe_model in await self.recipe_repo.get_all(db, user_id=current_user.id_user):
+        for recipe_model in await self.recipe_repo.get_all(db, user_id=user.id_user):
             list_ing_names = []
             list_tag_names = []
             for r in recipe_model.ingredients:
