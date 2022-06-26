@@ -45,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   TextFormField(
+                    key: const Key("User"),
                     controller: inputname,
                     maxLines: 1,
                     decoration: InputDecoration(
@@ -59,6 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                   ),
                   TextFormField(
+                    key: const Key("Password"),
                     controller: inputpassword,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -92,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                   ),
                   ElevatedButton(
+                    key: const Key("Enter"),
                     onPressed: ()  {
                       if (_formKey.currentState!.validate()) {
                         api_service.login(inputname.text, inputpassword.text);

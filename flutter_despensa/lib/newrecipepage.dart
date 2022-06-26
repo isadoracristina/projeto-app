@@ -102,6 +102,7 @@ class _NewRecipePageState extends State<NewRecipePage> {
               height: 5,
             ),
             TextFormField(
+              key: const Key("Name"),
               controller: inputrecipename,
               maxLines: 1,
               decoration: InputDecoration(
@@ -139,6 +140,7 @@ class _NewRecipePageState extends State<NewRecipePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   ElevatedButton(
+                    key: const Key("TAG"),
                     onPressed: () async {
                       final tag = await showDialog(
                           context: context,
@@ -148,12 +150,14 @@ class _NewRecipePageState extends State<NewRecipePage> {
                                   style: TextStyle(color: Colors.orangeAccent),
                                 ),
                                 content: TextField(
+                                  key: const Key("WriteTAG"),
                                   controller: inputrecipetag,
                                   decoration: const InputDecoration(
                                       hintText: "prática, café, rápida..."),
                                 ),
                                 actions: [
                                   TextButton(
+                                      key: const Key("AddTAG"),
                                       autofocus: true,
                                       child: const Text("ADICIONAR"),
                                       onPressed: () {
@@ -212,6 +216,7 @@ class _NewRecipePageState extends State<NewRecipePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   ElevatedButton(
+                    key: const Key("Ingredient"),
                     onPressed: () async {
                       final ing = await showDialog(
                           context: context,
@@ -221,12 +226,14 @@ class _NewRecipePageState extends State<NewRecipePage> {
                                   style: TextStyle(color: Colors.orangeAccent),
                                 ),
                                 content: TextField(
+                                  key: const Key("WriteIngredient"),
                                   controller: inputrecipetag,
                                   decoration: const InputDecoration(
                                       hintText: "2 ovos, 1 xícara de leite..."),
                                 ),
                                 actions: [
                                   TextButton(
+                                      key: const Key("AddIngredient"),
                                       autofocus: true,
                                       child: const Text("ADICIONAR"),
                                       onPressed: () {
@@ -299,6 +306,7 @@ class _NewRecipePageState extends State<NewRecipePage> {
               height: 5,
             ),
             TextFormField(
+              key: const Key("Time"),
               controller: inputrecipetime,
               maxLines: 1,
               keyboardType: TextInputType.number,
@@ -323,6 +331,7 @@ class _NewRecipePageState extends State<NewRecipePage> {
               height: 5,
             ),
             TextFormField(
+              key: const Key("Preparation"),
               controller: inputrecipepreparations,
               decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -345,6 +354,7 @@ class _NewRecipePageState extends State<NewRecipePage> {
               height: 5,
             ),
             TextFormField(
+              key: const Key("Rating"),
               controller: inputreciperating,
               decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -356,6 +366,7 @@ class _NewRecipePageState extends State<NewRecipePage> {
               height: 20,
             ),
             ElevatedButton(
+                key: const Key("AddRecipe"),
                 onPressed: () async {
                   await addRecipe(inputrecipename.value.text, int.parse(inputrecipetime.value.text), taglist,
                       inglist, inputrecipepreparations.value.text, double.parse(inputreciperating.value.text));

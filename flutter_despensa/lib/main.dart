@@ -53,6 +53,7 @@ class HomePage extends StatelessWidget {
         ),
         InkWell(
           child: RichText(
+              key: const Key("Initialize"),
               textAlign: TextAlign.center,
               text: const TextSpan(children: <TextSpan>[
                 TextSpan(

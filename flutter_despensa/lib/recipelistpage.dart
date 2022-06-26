@@ -160,6 +160,7 @@ Future<List<Recipe>> getRecipes() async {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     ElevatedButton(
+                      key: const Key("AddRecipe"),
                       onPressed: () {
                         Navigator.pushReplacement(
                             context,
@@ -183,6 +184,7 @@ Future<List<Recipe>> getRecipes() async {
                       ),
                     ),
                     ElevatedButton(
+                        key: const Key("FilterRecipes"),
                         onPressed: () {
                           Navigator.pushReplacement(
                             context,

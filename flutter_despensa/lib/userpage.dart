@@ -69,6 +69,7 @@ class _UserPageState extends State<UserPage> {
                   ),
                 ),
                 InkWell(
+                  key: const Key("RecipeList"),
                   onTap: () {
                     Navigator.pushReplacement(
                       context,

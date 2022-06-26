@@ -88,6 +88,7 @@ class _FilterPageState extends State<FilterPage> {
             height: 10
           ),
           TextFormField(
+            key: const Key("Ingredients"),
             controller: inputIngredientFilter,
             decoration: InputDecoration(
               hintText: "Pesquisa por ingrediente",
@@ -120,6 +121,7 @@ class _FilterPageState extends State<FilterPage> {
             height: 25
           ),
           ElevatedButton(
+            key: const Key("Filter"),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
               shadowColor: const Color.fromARGB(255, 241, 147, 58),
