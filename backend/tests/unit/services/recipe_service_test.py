@@ -38,8 +38,8 @@ def database():
 @pytest.mark.asyncio
 async def user(database):
     user_repo = UserRepositoryImpl()
-    user_repo.create(db, "admin", "admin@admin.com", "1234")
-    return await user_repo.get_by_name(db, "admin")
+    user_repo.create(db, "tester", "tester@tester.com", "1234")
+    return await user_repo.get_by_name(db, "tester")
 
 @pytest.mark.asyncio
 class TestRecipeService():
