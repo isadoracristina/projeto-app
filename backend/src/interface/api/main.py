@@ -14,10 +14,6 @@ from backend.src.domain.services.ingredient_service import IngredientService
 from backend.src.interface.database.database import SessionLocal, engine
 from backend.src.interface.database.models import Base
 import backend.src.interface.database.models as models
-from backend.src.adapters.repository.recipe_repository import RecipeRepositoryImpl
-from backend.src.adapters.repository.user_repository import UserRepositoryImpl
-from backend.src.adapters.repository.ingredient_repository import IngredientRepositoryImpl
-from backend.src.adapters.repository.tag_repository import TagRepositoryImpl
 
 from backend.src.domain.entities.user import User
 from backend.src.domain.entities.recipe import Recipe
@@ -27,6 +23,8 @@ from backend.src.domain.entities.ingredient import Ingredient
 from backend.src.domain.entities.tag import Tag
 
 from backend.src.interface.database.user_model import UserModel
+
+from backend.src.adapters.repository.user_repository import UserRepositoryImpl
 
 from backend.src.domain.services.ingredient_service import IngredientService
 from backend.src.domain.services.tag_service import TagService
@@ -288,5 +286,4 @@ async def get_filtered_recipes_by_tag(
 
     filter_service = FilterService()
     return filter_service.filter_by_tag(recipes, tags)
-
 
