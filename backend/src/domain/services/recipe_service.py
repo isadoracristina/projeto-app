@@ -42,13 +42,17 @@ class RecipeService():
         self.recipe_repo = RecipeRepositoryImpl()
 
     async def register_recipe(self, recipe: Recipe, user: User, db) -> Recipe:
-        return await self.recipe_repo.create(db, recipe, user);
+        return await self.recipe_repo.create(db, recipe, user)
 
     async def update_recipe(self, recipe: Recipe, recipe_id: int, user: User, db) -> Recipe:
-        return await self.recipe_repo.update(db, recipe_id, recipe);
+        await self.recipe_repo.update(db, recipe_id, recipe)
+        return recipe
 
     async def get_recipe(self, recipe_id: int, user: User, db) -> Recipe:
             recipe_model = await self.recipe_repo.get(db, recipe_id)
+
+            if recipe_model is None:
+                return None
 
             list_ing_names = []
             list_tag_names = []
@@ -61,7 +65,7 @@ class RecipeService():
                 t = await self.tag_repo.get(db, r.id_tag)
                 list_tag_names.append(t)
 
-                recipe = RecipeGet(id=recipe_model.id_recipe, id_user=recipe_model.id_user,
+            recipe = RecipeGet(id=recipe_model.id_recipe, id_user=recipe_model.id_user,
                        name=recipe_model.name_recipe, img_addr=recipe_model.img_addr,
                        preparation_time_sec=recipe_model.prep_time, preparation_method= recipe_model.prep_method,
                        rating=recipe_model.rating, observation=recipe_model.observation,
