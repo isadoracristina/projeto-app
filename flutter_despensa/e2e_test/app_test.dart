@@ -10,8 +10,8 @@ void main() {
     app.main();
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const Key("Initialize")));
     await Future.delayed(const Duration(seconds: 2));
+    await tester.tap(find.byKey(const Key("Initialize")));
     await tester.pumpAndSettle();
 
     await tester.enterText(find.byKey(const Key("User")), "admin");
@@ -55,8 +55,8 @@ void main() {
     app.main();
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const Key("Initialize")));
     await Future.delayed(const Duration(seconds: 2));
+    await tester.tap(find.byKey(const Key("Initialize")));
     await tester.pumpAndSettle();
 
     await tester.enterText(find.byKey(const Key("User")), "admin");
@@ -125,8 +125,8 @@ void main() {
     app.main();
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const Key("Initialize")));
     await Future.delayed(const Duration(seconds: 2));
+    await tester.tap(find.byKey(const Key("Initialize")));
     await tester.pumpAndSettle();
 
     await Future.delayed(const Duration(seconds: 5));
@@ -164,6 +164,10 @@ void main() {
     await tester.tap(find.byKey(const Key("RecipeList")));
     await tester.pumpAndSettle();
 
+    final count1 = tester.widgetList(find.byKey(const Key("RecipeList"))).toList().length;
+
+    expect(count1, equals(0));
+
     await Future.delayed(const Duration(seconds: 3));
     await tester.tap(find.byKey(const Key("AddRecipe")));
     await tester.pumpAndSettle();
@@ -194,9 +198,9 @@ void main() {
 
     await Future.delayed(const Duration(seconds: 3));
 
-    final count = tester.widgetList(find.byKey(const Key("RecipeList"))).toList().length;
+    final count2 = tester.widgetList(find.byKey(const Key("RecipeList"))).toList().length;
 
-    expect(count, equals(1));
+    expect(count2, equals(1));
 
   });
 
