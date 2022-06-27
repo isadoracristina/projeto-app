@@ -36,7 +36,7 @@ async def user(database):
 class TestIngredientService():
     async def test_new_empty(self, ingredient_service: IngredientService, user, database):
         ingredients = await ingredient_service.get_all_ingredients(db)
-        assert len(ingredients) == 27
+        assert len(ingredients) == 0
 
     async def test_new_ingredient(self, ingredient_service: IngredientService, user, database):
         await ingredient_service.register_ingredient(dummy_ingredient, db)
