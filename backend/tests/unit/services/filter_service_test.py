@@ -166,4 +166,4 @@ class TestFilterService():
     def test_fail(self, filter_service: FilterService, recipe: Recipe, tags: List[Tag]):
         recipe.ingredients = [tags[0], tags[1]]
         filtered = filter_service.filter_by_tag([recipe], [tags[2]])
-        assert len(filtered) == 1
+        assert len(filtered) == 0
