@@ -24,4 +24,3 @@ class TestRecipe():
             ingredients=[],
             tags=[]
         )
-
