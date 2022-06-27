@@ -80,6 +80,7 @@ Future<List<Recipe>> getRecipes() async {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return ListView.builder(
+                          key: const Key("RecipeList"),
                           shrinkWrap: true,
                           physics: const ClampingScrollPhysics(),
                           itemCount: snapshot.data!.length,

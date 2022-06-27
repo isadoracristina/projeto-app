@@ -119,7 +119,84 @@ void main() {
     await Future.delayed(const Duration(seconds: 5));
     expect(find.text("Coloque a água na forma dentro do congelador. Espere 1 hora"), findsOneWidget);
 
-    
+  });
+
+  testWidgets("Create a new User", (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key("Initialize")));
+    await Future.delayed(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+
+    await Future.delayed(const Duration(seconds: 5));
+    await tester.tap(find.byKey(const Key("Register")));
+    await tester.pumpAndSettle();
+
+    await Future.delayed(const Duration(seconds: 2));
+    await tester.enterText(find.byKey(const Key("FirstName")), "Joventino");
+    await tester.pumpAndSettle();
+    await Future.delayed(const Duration(seconds: 2));
+    await tester.enterText(find.byKey(const Key("LastName")), "da Silva");
+    await tester.pumpAndSettle();
+    await Future.delayed(const Duration(seconds: 2));
+    await tester.enterText(find.byKey(const Key("Email")), "jove_da_silva@email.com");
+    await tester.pumpAndSettle();
+    await Future.delayed(const Duration(seconds: 2));
+    await tester.enterText(find.byKey(const Key("NewPassword")), "jovedasilva");
+    await tester.pumpAndSettle();
+    await Future.delayed(const Duration(seconds: 5));
+    await tester.tap(find.byKey(const Key("RegisterUser")));
+    await tester.pumpAndSettle();
+
+    await Future.delayed(const Duration(seconds: 4));
+    await tester.enterText(find.byKey(const Key("User")), "Joventino");
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const Key("Password")), "jovedasilva");
+    await tester.pumpAndSettle();
+    await Future.delayed(const Duration(seconds: 2));
+    await tester.tap(find.byKey(const Key("Enter")));
+    await tester.pumpAndSettle();
+
+    expect(find.text("Joventino"), findsOneWidget);
+
+    await Future.delayed(const Duration(seconds: 5));
+    await tester.tap(find.byKey(const Key("RecipeList")));
+    await tester.pumpAndSettle();
+
+    await Future.delayed(const Duration(seconds: 3));
+    await tester.tap(find.byKey(const Key("AddRecipe")));
+    await tester.pumpAndSettle();
+
+    await Future.delayed(const Duration(seconds: 3));
+    await tester.enterText(find.byKey(const Key("Name")), "Gelo");
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key("TAG")));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const Key("WriteTAG")), "Prática");
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key("AddTAG")));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key("Ingredient")));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const Key("WriteIngredient")), "Água");
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key("AddIngredient")));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const Key("Time")), "60");
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const Key("Preparation")), "Coloque a água na forma dentro do congelador. Espere 1 hora");
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const Key("Rating")), "5");
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key("AddRecipe")));
+    await tester.pumpAndSettle();
+
+    await Future.delayed(const Duration(seconds: 3));
+
+    final count = tester.widgetList(find.byKey(const Key("RecipeList"))).toList().length;
+
+    expect(count, equals(1));
 
   });
 

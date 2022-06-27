@@ -125,6 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       const Text('Ainda não possui uma conta?'),
                       TextButton(
+                        key: const Key("Register"),
                         onPressed: () {
                           Navigator.pushReplacement(
                             context,

@@ -52,6 +52,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     children: [
                       Expanded(
                         child: TextFormField(
+                          key: const Key("FirstName"),
                           controller: inputname,
                           maxLines: 1,
                           decoration: InputDecoration(
@@ -68,6 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       Expanded(
                         child: TextFormField(
+                          key: const Key("LastName"),
                           controller: inputlastname,
                           maxLines: 1,
                           decoration: InputDecoration(
@@ -85,6 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 20,
                   ),
                   TextFormField(
+                    key: const Key("Email"),
                     controller: inputmail,
                     validator: (value) => EmailValidator.validate(value!)
                         ? null
@@ -102,6 +105,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 20,
                   ),
                   TextFormField(
+                    key: const Key("NewPassword"),
                     controller: inputpassword,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -123,6 +127,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 20,
                   ),
                   ElevatedButton(
+                    key: const Key("RegisterUser"),
                     onPressed: () {
                       setState(() {
                           if (_formKey.currentState!.validate()) {
